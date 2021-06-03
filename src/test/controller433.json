@@ -1,0 +1,614 @@
+{
+  "controllerId": "controller433",
+  "controllerclientindex": 0,
+  "created": "2021-05-20T17:08:54.435998+09:00",
+  "cycleElapsedPausedTime": 0,
+  "cycleElapsedProcessingTime": 7.206540107727051,
+  "cycleFinishProcessingTime": 1621498134.293586,
+  "cycleIndex": "1621498108539",
+  "cycleStartProcessingTime": 1621498127.087046,
+  "cycleStatistics": {
+    "detectionTimeSinceStart": 1231,
+    "executed": [
+      {
+        "cycleid": 0,
+        "executionEndTime": 1621498132.822335,
+        "executionStartTime": 1621498127.240259,
+        "graspname": "g6dnz4_0_0_0_gci56&56_49",
+        "gripperControlIndex": 56,
+        "initunnormalizedtargetpose": [
+          0.006313202543515224,
+          -0.6823040873915,
+          0.7310238763229218,
+          -0.00503667035913558,
+          0.5380904755348495,
+          -0.5191029549317961,
+          0.9731728255852308
+        ],
+        "isDropInSource": false,
+        "localtargetaabbextents": [
+          0.023250000000001752,
+          0.1227000000000092,
+          0.0222373010635376
+        ],
+        "logComputedPlanStatisticsIndex": 0,
+        "neighTargetThresh": 0.02,
+        "numIntermediateCycles": 1,
+        "objectPackingId": 254,
+        "objectType": "box",
+        "postCycleTime": null,
+        "robotMoveData": {
+          "elapsedMoveTime": 0.00004600000000000001,
+          "elapsedTimeInPause": 0
+        },
+        "robotMoveTime": 4.544000000000003,
+        "targetCenterOfMass": [0, 0, 0],
+        "targetMass": 0.276,
+        "targetSensorTimeStampMS": 1621498109469,
+        "targetUpdateTimeStampMS": 1621498110817,
+        "targetstatus": "success",
+        "targeturi": "mujin:/X709707_0001_0000.mujin.msgpack",
+        "totalPlanningComputationTime": 0.664897,
+        "trajdurations": [
+          {
+            "duration": 0.7982483144416139,
+            "name": "combinedgraspapproach"
+          },
+          {
+            "duration": 0.804,
+            "name": "graspLinearDepart0"
+          },
+          {
+            "duration": 1.331815,
+            "name": "toDestApproach0"
+          },
+          {
+            "duration": 0.372,
+            "name": "destLinearApproach0"
+          },
+          {
+            "duration": 1.072,
+            "name": "destLinearDepart0_0"
+          },
+          {
+            "duration": -0.19147739473294045,
+            "name": "transferMergingChange"
+          }
+        ],
+        "trajtotalduration": 4.186585919708674,
+        "transferSpeedMult": 1,
+        "useDynamicGoals": true
+      }
+    ],
+    "generatingGraspingModels": [
+      {
+        "graspComputationEndTime": 1621498111.777412,
+        "graspComputationStartTime": 1621498111.598082,
+        "graspComputationTime": 0.17932987213134766
+      }
+    ],
+    "placedTargetInfos": [
+      {
+        "detectedMass": 0.276,
+        "detectedSize": [
+          0.046500000000003504,
+          0.2454000000000184,
+          0.0444746021270752
+        ],
+        "partType": "X709707_0001_0000",
+        "poseInDest": [
+          3.0906592672321777e-8,
+          -0.7071068016757498,
+          0.7071067606973434,
+          -3.0912394422253606e-8,
+          0.1920000242314827,
+          0.009500016639679587,
+          0.03523731665588259
+        ],
+        "unit": "meter",
+        "unitMass": "kg"
+      }
+    ],
+    "planned": [
+      {
+        "graspname": "g6dnz4_0_0_0_gci56&56_49",
+        "iPickAndPlaceDestGoalIndex": 0,
+        "logComputedPlanStatisticsIndex": 0,
+        "status": "success",
+        "targeturi": ["mujin:/X709707_0001_0000.mujin.msgpack"],
+        "timestamp": 1621498112.607623,
+        "totalBinpickingComputationTime": 0.664897,
+        "totalPlanningComputationTime": 0.6743209362030029,
+        "trajdurations": 0,
+        "trajtotalduration": 0,
+        "transferSpeedMult": 1,
+        "usingOverlapFailThresholdsPerTarget": {
+          "detected_sc1_0": false
+        },
+        "validbodynames": ["detected_sc1_0"]
+      }
+    ],
+    "totalElapsedPausedTime": 0,
+    "totalGraspComputationTime": 0.17932987213134766
+  },
+  "cycleType": "order",
+  "destContainerChangedList": [true],
+  "finishCode": "FinishedOrderComplete",
+  "id": 138329,
+  "isPrepared": true,
+  "modified": "2021-05-20T17:08:54.435998+09:00",
+  "orderIds": {
+    "ignoreFinishPosition": false,
+    "orderGroupId": "G_348",
+    "orderNumPickLocations": 1,
+    "orderNumPlaceLocations": 1,
+    "orderNumber": 1,
+    "orderPickContainerIds": ["S_348"],
+    "orderPickContainerTypes": ["20L"],
+    "orderPlaceContainerIds": ["ad67b9c2"],
+    "orderPlaceContainerTypes": ["30L"],
+    "pickContainerHasOnlyOnePart": false,
+    "pickLocations": [1],
+    "placeLocations": [3],
+    "readQueueIndex": 5,
+    "readQueueLocation": 1,
+    "scenarioId": "B",
+    "setDestDepartToStartMoveLinear": 0,
+    "targeturi": "mujin:/X709707_0001.mujin.msgpack",
+    "targeturis": ["mujin:/X709707_0001.mujin.msgpack"]
+  },
+  "orderNumber": 1,
+  "pickVisionStatistics": [
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "parentStatsUID": "ObjectDetection:pickDetection:0",
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498109060,
+              "startTimestampMS": 1621498108848,
+              "type": "init"
+            }
+          ]
+        },
+        {
+          "binDetection": true,
+          "detectedParts": {
+            "mujin:/X709707_0001_0000.mujin.msgpack": 1
+          },
+          "fastDetection": true,
+          "imageAndDetectionElapsedTimeMS": 1918,
+          "isContainerPresent": 1,
+          "numDetectedParts": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498110812,
+              "startTimestampMS": 1621498110753,
+              "type": "obstacle"
+            },
+            {
+              "endTimestampMS": 1621498110812,
+              "startTimestampMS": 1621498108894,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498110154,
+              "startTimestampMS": 1621498108894,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109735,
+              "startTimestampMS": 1621498109469,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498110753,
+              "startTimestampMS": 1621498110180,
+              "type": "detect"
+            }
+          ],
+          "statsUID": "ObjectDetection:pickDetection:0"
+        }
+      ],
+      "targetURIs": ["mujin:/X709707_0001_0000.mujin.msgpack"],
+      "taskId": "pickDetection",
+      "taskStartTimeMS": 1621498108727,
+      "taskType": "ObjectDetection",
+      "totalDetectionCount": 2,
+      "totalDetectionTimeMS": 1918,
+      "totalGetImagesCount": 4
+    }
+  ],
+  "placeVisionStatistics": [
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "imageAndDetectionElapsedTimeMS": 717,
+          "isContainerPresent": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498109544,
+              "startTimestampMS": 1621498109469,
+              "type": "detect"
+            },
+            {
+              "endTimestampMS": 1621498109351,
+              "startTimestampMS": 1621498109090,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498109450,
+              "startTimestampMS": 1621498108827,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109544,
+              "startTimestampMS": 1621498108827,
+              "type": "overall"
+            }
+          ],
+          "statsUID": "ContainerDetection:placeDetection0:0"
+        },
+        {
+          "imageAndDetectionElapsedTimeMS": 740,
+          "isContainerPresent": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498127967,
+              "startTimestampMS": 1621498127883,
+              "type": "detect"
+            },
+            {
+              "endTimestampMS": 1621498127564,
+              "startTimestampMS": 1621498127278,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498127666,
+              "startTimestampMS": 1621498127227,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498127967,
+              "startTimestampMS": 1621498127227,
+              "type": "overall"
+            }
+          ],
+          "statsUID": "ContainerDetection:placeDetection0:1"
+        }
+      ],
+      "taskId": "placeDetection0",
+      "taskStartTimeMS": 1621498108736,
+      "taskType": "ContainerDetection",
+      "totalDetectionCount": 2,
+      "totalDetectionTimeMS": 1457,
+      "totalGetImagesCount": 2
+    }
+  ],
+  "placedInDest": 1,
+  "sourceContainerChangedList": [true],
+  "started": "2021-05-20T17:08:47.087046+09:00",
+  "targetname": "X709707_0001",
+  "usePackFinishCode": null,
+  "visionStatistics": [
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "parentStatsUID": "ContainerDetection:placeDetection0:0",
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498109590,
+              "startTimestampMS": 1621498109544,
+              "type": "update"
+            }
+          ]
+        },
+        {
+          "parentStatsUID": "ObjectDetection:pickDetection:0",
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498110830,
+              "startTimestampMS": 1621498110812,
+              "type": "update"
+            }
+          ]
+        },
+        {
+          "parentStatsUID": "ContainerDetection:placeDetection0:1",
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498127998,
+              "startTimestampMS": 1621498127967,
+              "type": "update"
+            }
+          ]
+        }
+      ],
+      "taskType": "UpdateEnvironment",
+      "totalDetectionCount": 3
+    },
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "parentStatsUID": "ObjectDetection:pickDetection:0",
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498109060,
+              "startTimestampMS": 1621498108848,
+              "type": "init"
+            }
+          ]
+        },
+        {
+          "binDetection": true,
+          "detectedParts": {
+            "mujin:/X709707_0001_0000.mujin.msgpack": 1
+          },
+          "fastDetection": true,
+          "imageAndDetectionElapsedTimeMS": 1918,
+          "isContainerPresent": 1,
+          "numDetectedParts": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498110812,
+              "startTimestampMS": 1621498110753,
+              "type": "obstacle"
+            },
+            {
+              "endTimestampMS": 1621498110812,
+              "startTimestampMS": 1621498108894,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498110154,
+              "startTimestampMS": 1621498108894,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109735,
+              "startTimestampMS": 1621498109469,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498110753,
+              "startTimestampMS": 1621498110180,
+              "type": "detect"
+            }
+          ],
+          "statsUID": "ObjectDetection:pickDetection:0"
+        }
+      ],
+      "targetURIs": ["mujin:/X709707_0001_0000.mujin.msgpack"],
+      "taskId": "pickDetection",
+      "taskStartTimeMS": 1621498108727,
+      "taskType": "ObjectDetection",
+      "totalDetectionCount": 2,
+      "totalDetectionTimeMS": 1918,
+      "totalGetImagesCount": 4
+    },
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498108894,
+              "startTimestampMS": 1621498108894,
+              "type": "init"
+            }
+          ]
+        },
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498119644,
+              "startTimestampMS": 1621498119578,
+              "type": "send"
+            },
+            {
+              "endTimestampMS": 1621498119644,
+              "startTimestampMS": 1621498119320,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498119515,
+              "startTimestampMS": 1621498119320,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109735,
+              "startTimestampMS": 1621498109469,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498119578,
+              "startTimestampMS": 1621498119515,
+              "type": "filter"
+            }
+          ]
+        },
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498130514,
+              "startTimestampMS": 1621498130481,
+              "type": "send"
+            },
+            {
+              "endTimestampMS": 1621498130514,
+              "startTimestampMS": 1621498129723,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498130405,
+              "startTimestampMS": 1621498129723,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498129946,
+              "startTimestampMS": 1621498129749,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498130481,
+              "startTimestampMS": 1621498130405,
+              "type": "filter"
+            }
+          ]
+        }
+      ],
+      "targetURIs": ["mujin:/X709707_0001_0000.mujin.msgpack"],
+      "taskId": "pickDetection_sourceVerif",
+      "taskStartTimeMS": 1621498108728,
+      "taskType": "SendExecutionVerificationSource",
+      "totalDetectionCount": 3,
+      "totalGetImagesCount": 2
+    },
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "imageAndDetectionElapsedTimeMS": 717,
+          "isContainerPresent": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498109544,
+              "startTimestampMS": 1621498109469,
+              "type": "detect"
+            },
+            {
+              "endTimestampMS": 1621498109351,
+              "startTimestampMS": 1621498109090,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498109450,
+              "startTimestampMS": 1621498108827,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109544,
+              "startTimestampMS": 1621498108827,
+              "type": "overall"
+            }
+          ],
+          "statsUID": "ContainerDetection:placeDetection0:0"
+        },
+        {
+          "imageAndDetectionElapsedTimeMS": 740,
+          "isContainerPresent": 1,
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498127967,
+              "startTimestampMS": 1621498127883,
+              "type": "detect"
+            },
+            {
+              "endTimestampMS": 1621498127564,
+              "startTimestampMS": 1621498127278,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498127666,
+              "startTimestampMS": 1621498127227,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498127967,
+              "startTimestampMS": 1621498127227,
+              "type": "overall"
+            }
+          ],
+          "statsUID": "ContainerDetection:placeDetection0:1"
+        }
+      ],
+      "taskId": "placeDetection0",
+      "taskStartTimeMS": 1621498108736,
+      "taskType": "ContainerDetection",
+      "totalDetectionCount": 2,
+      "totalDetectionTimeMS": 1457,
+      "totalGetImagesCount": 2
+    },
+    {
+      "cycleIndex": "1621498108539",
+      "detectionHistory": [
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498108894,
+              "startTimestampMS": 1621498108894,
+              "type": "init"
+            }
+          ]
+        },
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498112948,
+              "startTimestampMS": 1621498112878,
+              "type": "send"
+            },
+            {
+              "endTimestampMS": 1621498112948,
+              "startTimestampMS": 1621498112770,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498112783,
+              "startTimestampMS": 1621498112770,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498109351,
+              "startTimestampMS": 1621498109346,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498112878,
+              "startTimestampMS": 1621498112783,
+              "type": "filter"
+            }
+          ]
+        },
+        {
+          "procedureStats": [
+            {
+              "endTimestampMS": 1621498127899,
+              "startTimestampMS": 1621498127779,
+              "type": "send"
+            },
+            {
+              "endTimestampMS": 1621498127899,
+              "startTimestampMS": 1621498127344,
+              "type": "overall"
+            },
+            {
+              "endTimestampMS": 1621498127657,
+              "startTimestampMS": 1621498127344,
+              "type": "snap"
+            },
+            {
+              "endTimestampMS": 1621498127564,
+              "startTimestampMS": 1621498127559,
+              "type": "capture"
+            },
+            {
+              "endTimestampMS": 1621498127779,
+              "startTimestampMS": 1621498127657,
+              "type": "filter"
+            }
+          ]
+        }
+      ],
+      "taskId": "placeDetection0_containerVerif",
+      "taskStartTimeMS": 1621498108736,
+      "taskType": "SendExecutionVerificationDest",
+      "totalDetectionCount": 3,
+      "totalGetImagesCount": 2
+    }
+  ]
+}

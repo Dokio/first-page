@@ -1,6 +1,13 @@
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-21 10:46:40
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-21 12:11:21
+ * @FilePath: /play-back/src/hooks/WebstackCycleLogQuery.tsx
+ */
 import { useState, useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
-import { CycleInformationProps } from "../components/LandingPageTable";
 
 interface CycleLogParams {
   limit?: number;
@@ -9,8 +16,8 @@ interface CycleLogParams {
 }
 
 const useWebstackCycleLogQuery = (baseUrl: string) => {
-  const [filterSearchParams, setFilterSearchParams] = useState<CycleLogParams>({});
-  const [result, setResult] = useState<AxiosResponse<{ objects: CycleInformationProps[] }> | null>(null);
+  const [params, setParams] = useState<CycleLogParams>({});
+  const [result, setResult] = useState<AxiosResponse<any> | null>(null);
   useEffect(() => {
     const apiClient = axios.create({
       baseURL: `${baseUrl}/api/v1/cycleLog/?cycleType__neq=production`,
@@ -21,12 +28,12 @@ const useWebstackCycleLogQuery = (baseUrl: string) => {
     });
     apiClient
       .get("", {
-        params: filterSearchParams,
+        params: params,
       })
       .then((newResult) => setResult(newResult));
-  }, [filterSearchParams, baseUrl]);
+  }, [params, baseUrl]);
 
-  return { result, filterSearchParams, setFilterSearchParams };
+  return { result, params, setParams };
 };
 
 export default useWebstackCycleLogQuery;

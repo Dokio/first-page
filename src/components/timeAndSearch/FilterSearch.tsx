@@ -1,5 +1,15 @@
-import React, { FC, useState } from "react";
+// /*
+//  * @Descripttion:
+//  * @Author: Wei
+//  * @Date: 2021-05-05 20:22:10
+//  * @LastEditors: Wei
+//  * @LastEditTime: 2021-05-15 18:05:06
+//  * @FilePath: \react-TS\src\pages\playBack\component\subcomponent\FilterSearch.tsx
+//  */
+
+import { FC, useState } from "react";
 import { Form, Checkbox } from "antd";
+// import style from '../querySearch.module.less'
 import style from "./filterSearch.module.less";
 import { CheckboxChangeEvent } from "antd/lib/checkbox/Checkbox";
 import { Button, Icons, Input } from "@mujin/uicomponents";
@@ -13,9 +23,9 @@ interface FilterSearchDisabledState {
 }
 const cycleTypeOptions = ["order", "preparation", "visionInspection"];
 
-const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
+const FilterSearch: FC<FilterProps> = (props) => {
   const [form] = Form.useForm();
-  const { setFilterSearchParams } = filterSearchProps;
+  const { setParams } = props;
   const [disabled, setDisabled] = useState<FilterSearchDisabledState>({
     finishCodeDisabled: true,
     cycleIndexDisabled: true,
@@ -24,25 +34,26 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
   });
 
   const handleCheckBoxChange = (
-    checkboxEvent: CheckboxChangeEvent,
+    e: CheckboxChangeEvent,
     inputDisablekey: string,
     inputPlaceholder: string
   ) => {
-    setDisabled((idisabledItem) => {
+    setDisabled((i) => {
       return {
-        ...idisabledItem,
-        [inputDisablekey]: !checkboxEvent.target.checked,
+        ...i,
+        [inputDisablekey]: !e.target.checked,
       };
     });
 
-    if (!checkboxEvent.target.checked) {
+    if (!e.target.checked) {
       form.setFieldsValue({ [inputPlaceholder]: undefined });
     }
   };
 
   const handleApplyFilters = () => {
-    form.validateFields().then((filterResult) => {
-      setFilterSearchParams(filterResult);
+    form.validateFields().then((res) => {
+      //console.log(res)
+      setParams(res);
     });
   };
 
@@ -62,7 +73,7 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
       cycleIndexCheckBox: false,
       groupIdCheckBox: false,
       partTypeCheckBox: false,
-
+      //cycleTypes: false,
     });
   };
 
@@ -71,6 +82,7 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
       <Form
         name="basic"
         form={form}
+        //onFinish={handleFinish}
         labelAlign="left"
         initialValues={{
           cycleTypes: ["order", "preparation", "visionInspection"],
@@ -95,9 +107,9 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
               valuePropName="checked"
             >
               <Checkbox
-                onChange={(checkboxEvent) =>
+                onChange={(e) =>
                   handleCheckBoxChange(
-                    checkboxEvent,
+                    e,
                     "finishCodeDisabled",
                     "finishCodeInput"
                   )
@@ -124,9 +136,9 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
               valuePropName="checked"
             >
               <Checkbox
-                onChange={(checkboxEvent) =>
+                onChange={(e) =>
                   handleCheckBoxChange(
-                    checkboxEvent,
+                    e,
                     "cycleIndexDisabled",
                     "cycleIndexInput"
                   )
@@ -140,6 +152,7 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
                 allowClear
                 disabled={disabled.cycleIndexDisabled}
                 placeholder="e.g 1616546114613"
+                //style={disabled? {backgroundColor:'green'} : {backgroundColor:'red'}}
               />
             </Form.Item>
           </Form.Item>
@@ -149,8 +162,8 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
           <Form.Item noStyle>
             <Form.Item name="groupIdCheckBox" noStyle valuePropName="checked">
               <Checkbox
-                onChange={(checkboxEvent) =>
-                  handleCheckBoxChange(checkboxEvent, "groupIdDisabled", "groupIdInput")
+                onChange={(e) =>
+                  handleCheckBoxChange(e, "groupIdDisabled", "groupIdInput")
                 }
               >
                 Group Id :{" "}
@@ -170,8 +183,8 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
           <Form.Item noStyle>
             <Form.Item name="partTypeCheckBox" noStyle valuePropName="checked">
               <Checkbox
-                onChange={(checkboxEvent) =>
-                  handleCheckBoxChange(checkboxEvent, "partTypeDisabled", "partTypeInput")
+                onChange={(e) =>
+                  handleCheckBoxChange(e, "partTypeDisabled", "partTypeInput")
                 }
               >
                 PartType :{" "}
@@ -195,16 +208,27 @@ const FilterSearch: FC<FilterProps> = (filterSearchProps) => {
               variant="secondary"
               icon={
                 <Icons.CrossCircleFilled
+                  //className={style.mujin-icon}
                   primaryColor={"#DA0E11"}
                 />
               }
+              style={{
+                backgroundColor: "@nero",
+                borderRadius: "5px",
+                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              }}
             />
 
             <Button
               onClick={handleApplyFilters}
               text="Apply filters"
               variant="secondary"
-              className={style.applyFilterButton}
+              style={{
+                backgroundColor: "#2D2E31",
+                borderRadius: "5px",
+                fontSize: "14px",
+                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              }}
             />
           </Form.Item>
         </div>

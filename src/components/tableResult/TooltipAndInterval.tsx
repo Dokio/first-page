@@ -1,38 +1,44 @@
-import React, { FC } from "react";
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-09 20:41:47
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-20 17:44:30
+ * @FilePath: /play-back/src/components/tableResult/TooltipAndInterval.tsx
+ */
+import { FC } from "react";
+//import style from '../../containers/landingPage.module.less';
 import style from "./tooltipAndInterval.module.less";
-
-const CALCULATE_ACCURACY = 1;
-const INTERVAL_ACCURACY = 2;
-//  interface of IdleTime(interval between tew lines)
+//interface of IdleTime(interval between tew lines)
 interface TableIdleProps {
   startTime: number;
   endTime: number;
 }
 
-//  interface of Tooltip(detail information of Table result)
+//interface of Tooltip(detail information of Table result)
 interface DetailResultProps {
   finishCode: string;
   placedInDest: number;
   orderNumber: number;
-  targetstatus: Record<string, unknown>[];
+  targetstatus: any[];
   status: string;
   cycleElapsedProcessingTime: number;
 }
 
-//  IdleTime Subcomponent
+//IdleTime Subcomponent
 const TableIdle: FC<TableIdleProps> = ({ startTime, endTime }) => {
   return (
     <div className={style.tableIdle}>
       <p>
         <span>idle time </span>
-        <span>{Math.abs(startTime - endTime).toFixed(INTERVAL_ACCURACY)}</span>
+        <span>{Math.abs(startTime - endTime).toFixed(2)}</span>
         <span> [sec]</span>
       </p>
     </div>
   );
 };
 
-//  DetailResult Subcomponent
+//DetailResult Subcomponent
 const DetailResult: FC<DetailResultProps> = ({
   finishCode,
   placedInDest,
@@ -41,30 +47,25 @@ const DetailResult: FC<DetailResultProps> = ({
   status,
   cycleElapsedProcessingTime,
 }) => {
-  
   let warningList: string[] = [];
-  for (const status of targetstatus) {
-    if (status.targetstatus !== "success") {
-      warningList.push((status as {targetstatus:string}).targetstatus);
+  for (const v of targetstatus) {
+    if (v.targetstatus !== "success") {
+      warningList.push(v.targetstatus);
     }
   }
-  
-  //  input [a, b, c, a], output {a:2, b:1, c:1}
-  const countWarnings = (warningList: string[]): object => {
-    const warningToTimes: Record<string,number> = {};
-    for (let warningIndex = 0; warningIndex < warningList.length; warningIndex++) {
-      if (!warningToTimes[warningList[warningIndex]]) {
-        warningToTimes[warningList[warningIndex]] = 1;
+  //input[a, b, c, a] output {a:2, b:1, c:1}
+  const fun = (arr: string[]): object => {
+    const obj: any = {};
+    for (let i = 0; i < arr.length; i++) {
+      if (!obj[arr[i]]) {
+        obj[arr[i]] = 1;
       } else {
-        warningToTimes[warningList[warningIndex]] = warningToTimes[warningList[warningIndex]] + 1;
+        obj[arr[i]] = obj[arr[i]] + 1;
       }
     }
-    return warningToTimes;
+    return obj;
   };
-
-
-
-  const warningToTimes: object = countWarnings(warningList);
+  const obj: object = fun(warningList);
 
   return (
     <div className={style.detailResult}>
@@ -78,16 +79,16 @@ const DetailResult: FC<DetailResultProps> = ({
         </p>
         <p>
           <span>Order status : </span>
-          <span className={style.orderStatusSpan}>{finishCode}</span>
+          <span style={{ textAlign: "center" }}>{finishCode}</span>
         </p>
         <p>
           <span className={style.labelName}>Error</span>
-          {Object.keys(warningToTimes).map((warningItem, warningIndex) => {
+          {Object.keys(obj).map((v, i) => {
             return (
-              <span key={warningIndex}>
+              <span key={i}>
                 <br />
                 <span>
-                  {warningItem}×{Object.values(warningToTimes)[warningIndex]}
+                  {v}×{Object.values(obj)[i]}
                 </span>
               </span>
             );
@@ -99,12 +100,12 @@ const DetailResult: FC<DetailResultProps> = ({
             <span>PickSpeed :</span>
             <br />
             <span>
-              {(cycleElapsedProcessingTime / placedInDest).toFixed(CALCULATE_ACCURACY)}
+              {(cycleElapsedProcessingTime / placedInDest).toFixed(1)}
             </span>
             <span className={style.unit}>sec/pick</span>
-            <span className={style.spanDisplay} />
+            <span style={{ display: "inline-block", width: "15px" }} />
             <span>
-              {(3600 / (cycleElapsedProcessingTime / placedInDest)).toFixed(CALCULATE_ACCURACY)}
+              {(3600 / (cycleElapsedProcessingTime / placedInDest)).toFixed(1)}
             </span>
             <span className={style.unit}>pick/hour</span>
           </p>

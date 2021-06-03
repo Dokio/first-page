@@ -1,11 +1,20 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-04 20:36:05
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-27 10:35:37
+ * @FilePath: /play-back/src/components/LandingPageTable.tsx
+ */
+import { FC, Fragment, useEffect, useState } from "react";
+//import style from "../containers/landingPage.module.less"
 import style from "./landingPageTable.module.less";
 import TableResult from "./tableResult/TableResult";
+import JsonData from "../test/test.json";
 import { FilterProps } from "../containers/LandingPage";
 import { Button, Pagination } from "@mujin/uicomponents";
 import useWebstackCycleLogQuery from "../hooks/WebstackCycleLogQuery";
 import {
-  OrderDetails,
   TableCycleInfo,
   TableOrderDetails,
   TableOrderInfo,
@@ -13,40 +22,20 @@ import {
 } from "./tableResult/TableInformationCollection";
 import { TableIdle } from "./tableResult/TooltipAndInterval";
 
-const TABLE_PAGE = 1;
-const TABLE_PAGE_SIZE = 5;
-const TABLE_PAGE_LIMIT = 20;
-export interface CycleInformationProps {
-  finishCode:string;
-  cycleStartProcessingTime:number;
-  cycleFinishProcessingTime:number;
-  cycleElapsedProcessingTime:number;
-  cycleIndex:string;
-  cycleType:string;
-  controllerclientindex:string
-  isPrepared:boolean;
-  ignoreFinishPosition:boolean;
-  targetname: string;
-  placedInDest:number;
-  targetstatus:Record<string, unknown>[];
-  orderNumber:number;
-  status:string;
-  orderIds?: OrderDetails;
-  cycleStatistics: { executed: Record<string, unknown>[] };
-}
-
-const LandingPageTable: FC<FilterProps> = (filterSearchProps) => {
-  const [dataSource, setDataSource] = useState<CycleInformationProps[]>([]);
-  const { filterSearchParams } = filterSearchProps;
-  const { result, filterSearchParams: queryParams, setFilterSearchParams } = useWebstackCycleLogQuery(
+const LandingPageTable: FC<FilterProps> = (props) => {
+  const [dataSource, setDataSource] = useState<any[]>([]);
+  const { params } = props;
+  const { result, params: queryParams, setParams } = useWebstackCycleLogQuery(
     "http://controller433.mujin.co.jp"
   );
+  console.log(result)
 
-
-  const handleCopyJson = (cycleJsonDetail: CycleInformationProps) => {
+  const handleCopyJson = (v: any) => {
+    console.log(v);
+    console.log();
     const input = document.createElement("input");
     document.body.appendChild(input);
-    input.value = JSON.stringify(cycleJsonDetail);
+    input.value = JSON.stringify(v);
     input.focus();
     input.select();
     document.execCommand("copy");
@@ -54,47 +43,47 @@ const LandingPageTable: FC<FilterProps> = (filterSearchProps) => {
   };
 
   useEffect(() => {
-    const webstackData = result?.data as { objects: CycleInformationProps[] };
-    if (webstackData?.objects) {
+    const webstackData = result?.data as { objects: any[] };
+    if (!!webstackData?.objects) {
       if (
-        !filterSearchParams.cycleIndexInput &&
-        !filterSearchParams.finishCodeInput &&
-        !filterSearchParams.cycleTypes.length &&
-        !filterSearchParams.groupIdInput &&
-        !filterSearchParams.partTypeInput
+        !params.cycleIndexInput &&
+        !params.finishCodeInput &&
+        !params.cycleTypes.length &&
+        !params.groupIdInput &&
+        !params.partTypeInput
       ) {
         setDataSource(webstackData.objects);
       } else {
         setDataSource(
-          webstackData.objects.filter((cycleItem) => {
+          webstackData.objects.filter((v) => {
             return (
-              (cycleItem.cycleIndex === filterSearchParams.cycleIndexInput ||
-                !filterSearchParams.cycleIndexInput) &&
-              filterSearchParams.cycleTypes.includes(cycleItem.cycleType as string) &&
-              (cycleItem.finishCode === filterSearchParams.finishCodeInput ||
-                !filterSearchParams.finishCodeInput) &&
-              ((cycleItem.orderIds as {orderGroupId: string}).orderGroupId === filterSearchParams.groupIdInput ||
-                !filterSearchParams.groupIdInput) &&
-              (cycleItem.targetname === filterSearchParams.partTypeInput || !filterSearchParams.partTypeInput)
+              (v.cycleIndex === params.cycleIndexInput ||
+                !params.cycleIndexInput) &&
+              params.cycleTypes.includes(v.cycleType) &&
+              (v.finishCode === params.finishCodeInput ||
+                !params.finishCodeInput) &&
+              (v.orderIds.orderGroupId === params.groupIdInput ||
+                !params.groupIdInput) &&
+              (v.targetname === params.partTypeInput || !params.partTypeInput)
             );
           })
         );
       }
     }
-  }, [result, filterSearchParams]);
+  }, [result, params]);
 
   const [pageParams, setPageParams] = useState<{
     page: number;
     pageSize: number;
   }>({
-    page: TABLE_PAGE,
-    pageSize: TABLE_PAGE_SIZE,
+    page: 1,
+    pageSize: 5,
   });
 
   useEffect(() => {
     if (!queryParams.limit) {
-      setFilterSearchParams({
-        limit: TABLE_PAGE_LIMIT,
+      setParams({
+        limit: 20,
       });
     }
   });
@@ -110,6 +99,17 @@ const LandingPageTable: FC<FilterProps> = (filterSearchProps) => {
     });
   };
 
+  useEffect(() => {
+    //console.log(JsonData.objects?.filter((_, i) => i > pageParams.pageSize * (pageParams.page - 1)))
+    setDataSource(
+      JsonData?.objects?.filter(
+        (_, i) =>
+          i > pageParams.pageSize * (pageParams.page - 1) &&
+          i < pageParams.pageSize * pageParams.page + 1
+      )
+    );
+  }, [pageParams]);
+
   return (
     <div className={style.tableBox}>
       <table>
@@ -123,60 +123,65 @@ const LandingPageTable: FC<FilterProps> = (filterSearchProps) => {
           </tr>
         </thead>
         <tbody>
-          {dataSource.map((cycleInformation: CycleInformationProps, cycleNumber: number) => {
+          {dataSource.map((v: any, i: number) => {
             return (
-              <Fragment key={cycleNumber}>
+              <Fragment key={i}>
                 <tr>
                   <td>
                     <TableTime
-                      cycleStartProcessingTime={cycleInformation.cycleStartProcessingTime}
-                      cycleFinishProcessingTime={cycleInformation.cycleFinishProcessingTime}
-                      cycleElapsedProcessingTime={cycleInformation.cycleElapsedProcessingTime}
+                      cycleStartProcessingTime={v.cycleStartProcessingTime}
+                      cycleFinishProcessingTime={v.cycleFinishProcessingTime}
+                      cycleElapsedProcessingTime={v.cycleElapsedProcessingTime}
                     />
                   </td>
                   <td>
                     <TableCycleInfo
-                      cycleIndex={cycleInformation.cycleIndex}
-                      cycleType={cycleInformation.cycleType}
+                      cycleIndex={v.cycleIndex}
+                      cycleType={v.cycleType}
                     />
                   </td>
                   <td>
                     <TableOrderInfo
-                      controllerclientindex={cycleInformation.controllerclientindex}
-                      isPrepared={cycleInformation.isPrepared}
-                      ignoreFinishPosition={cycleInformation.ignoreFinishPosition}
+                      controllerclientindex={v.controllerclientindex}
+                      isPrepared={v.isPrepared}
+                      ignoreFinishPosition={v.ignoreFinishPosition}
                     />
                   </td>
                   <td>
                     <TableOrderDetails
-                      targetname={cycleInformation.targetname}
-                      details={cycleInformation.orderIds}
+                      targetname={v.targetname}
+                      details={v.orderIds}
                     />
                   </td>
                   <td>
-                    <TableResult detail={  cycleInformation} />
+                    <TableResult detail={v} />
                   </td>
                   <td>
                     <div className={style.tableButton}>
                       <Button
-                        onClick={() => handleCopyJson(cycleInformation)}
+                        onClick={() => handleCopyJson(v)}
                         text="Copy Json"
                         variant="secondary"
-                        className={style.copyJsonButton}
+                        style={{
+                          backgroundColor: "#2D2E31",
+                          borderRadius: "5px",
+                          fontSize: "14px",
+                          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                        }}
                       />
                     </div>
                   </td>
                 </tr>
-                {cycleNumber !== dataSource.length - 1 && (
+                {i !== dataSource.length - 1 && (
                   <tr>
                     {Math.abs(
-                      (dataSource[cycleNumber].cycleFinishProcessingTime as number) ?? 0 -
-                      (dataSource[cycleNumber + 1].cycleStartProcessingTime as number) ?? 0
+                      dataSource[i].cycleFinishProcessingTime -
+                        dataSource[i + 1].cycleStartProcessingTime
                     ) > 1 ? (
                       <td colSpan={6}>
                         <TableIdle
-                          startTime={dataSource[cycleNumber].cycleFinishProcessingTime as number ?? 0}
-                          endTime={dataSource[cycleNumber + 1].cycleStartProcessingTime as number ?? 0}
+                          startTime={dataSource[i].cycleFinishProcessingTime}
+                          endTime={dataSource[i + 1].cycleStartProcessingTime}
                         />
                       </td>
                     ) : null}
@@ -188,12 +193,14 @@ const LandingPageTable: FC<FilterProps> = (filterSearchProps) => {
         </tbody>
       </table>
       <Pagination
-        className={style.paginationStyle}  
+        style={{ marginTop: "20px" }}
         defaultCurrent={2}
+        //pageSize={8}
+        //total={50}
         showQuickJumper
         showSizeChanger
         pageSize={pageParams.pageSize}
-        total={result?.data?.objects?.length}
+        total={JsonData.objects?.length}
         onChange={handlePageChange}
       />
     </div>

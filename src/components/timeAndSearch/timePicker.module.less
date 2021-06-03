@@ -4,3 +4,131 @@
   width: 300px;
   color: @black;
 }
+
+.test{
+  color:red;
+}
+
+.site-calendar-demo-card {
+  width: 300px;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+}
+
+.recently-time{
+  margin-left:50px;
+  display:flex;
+  flex-direction: column;
+  span:nth-child(1){
+    color:#7F8392;
+    font-size:16px;
+    font-weight: 400;
+  }
+  font-size: 16px;
+  font-weight: 400;
+  
+  &::before{
+    content: '';
+    width: 40%;
+    height: 1px;
+    background-color: #2D2E31;
+    position: absolute;
+    top: 300px;
+    left: 340px;
+    z-index: 10;
+  }
+
+  &::after{
+    content: '';
+    width: 33%;
+    height: 1px;
+    background-color: #2D2E31;
+    position: absolute;
+    top: 300px;
+    left: 10px;
+    z-index: 10;
+  }
+
+}
+
+
+.relative-time{
+  color:rgba(255, 255, 255, 0.85);
+  span:nth-child(1){
+    margin-left: 10px;
+    color:#7F8392;
+    font-size:16px;
+    font-weight: 400;
+  }
+  span{
+    margin-left: 20px;
+    padding-top:6px;
+  }
+
+  display: flex;
+  height: 491px;
+  width: 220px;
+  padding-left: 20px;
+  position: absolute;
+  left: 700px;
+  top: 6.6px;
+  background-color: #1f1f1f;
+  font-size: 16px;
+  font-weight: 400;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+
+  &::before {
+    content: "";
+    background-color: #2D2E31;
+    width: 1px;
+    height: calc(100% - 50px);
+    position: absolute;
+    left: -10px;
+    top: 6px;
+  }
+
+  &::after {
+    content: "";
+    background-color: #2D2E31;
+    width: 1px;
+    height: calc(100% - 50px);
+    position: absolute;
+    left: -390px;
+    top: 6px;
+  }
+
+}
+
+.time-zone-box{
+  color:#7F8392;
+  font-size:16px;
+  font-weight: 400;
+  .time-zone{
+    border: orange solid 1px;
+    height: 30px;
+    width: 250px;
+  }
+}
+
+.time-range-button{
+  position: absolute;
+  left: 720px;
+  top: 430px;
+  width: 174px;
+  color: #D7DDE6;
+}
+
+
+
+
+
+.timezone-selector{
+  width:290px !important;
+}
+
+
+.checked{
+  color:@orange;
+}

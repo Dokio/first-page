@@ -1,53 +1,61 @@
-import React, { FC, useState } from "react";
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-01 16:23:44
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-20 10:41:03
+ * @FilePath: /finalversion-for-playback/src/pages/playBack/component/SubHeader.tsx
+ */
+import { FC, useState } from "react";
 import style from "./subHeader.module.less";
 
 interface SubHeaderTab {
   name: string;
   checked: boolean;
-  clickEvent: () => void;
+  fun: () => void;
 }
 
-enum SubHeaderNames {
+enum E_TAB {
   summary = "Summary",
   orderCycle = "Order cycle",
   signal = "Signal",
 }
 
 const SubHeader: FC = () => {
-  const [subHeaderList, setSubHeaderList] = useState<SubHeaderTab[]>([
+  const [tab, setTab] = useState<SubHeaderTab[]>([
     {
-      name: SubHeaderNames["summary"],
+      name: E_TAB["summary"],
       checked: true,
-      clickEvent: () => handleClickSummary(),
+      fun: () => handleCLickSummary(),
     },
     {
-      name: SubHeaderNames["orderCycle"],
+      name: E_TAB["orderCycle"],
       checked: false,
-      clickEvent: () => handleClickOrderCycle(),
+      fun: () => handleCLickOrderCycle(),
     },
     {
-      name: SubHeaderNames["signal"],
+      name: E_TAB["signal"],
       checked: false,
-      clickEvent: () => handleClickSignal(),
+      fun: () => handleCLickSignal(),
     },
   ]);
 
-  const handleClickSummary = () => {
-    console.log('ClickSummary');
+  const handleCLickSummary = () => {
+    console.log(1);
   };
-  const handleClickOrderCycle = () => {
-    console.log('ClickOrderCycle');
+  const handleCLickOrderCycle = () => {
+    console.log(2);
   };
-  const handleClickSignal = () => {
-    console.log('ClickSignal');
+  const handleCLickSignal = () => {
+    console.log(3);
   };
 
-  const handleClick = (subHeaderElement: SubHeaderTab) => {
-    setSubHeaderList(
-      subHeaderList.map((subHeaderItem) => {
+  const handleClick = (v: SubHeaderTab) => {
+    setTab(
+      tab.map((item) => {
         return {
-          ...subHeaderItem,
-          checked: subHeaderItem.name === subHeaderElement.name,
+          ...item,
+          checked: item.name === v.name,
         };
       })
     );
@@ -55,14 +63,14 @@ const SubHeader: FC = () => {
 
   return (
     <div className={style.subheader}>
-      {subHeaderList.map((subHeaderItem) => {
+      {tab.map((v) => {
         return (
           <span
-            key={subHeaderItem.name}
-            className={subHeaderItem.checked ? style.checked : style.emptyStyle}
-            onClick={() => [subHeaderItem.clickEvent(), handleClick(subHeaderItem)]}
+            key={v.name}
+            className={v.checked ? style.checked : ""}
+            onClick={() => [v.fun(), handleClick(v)]}
           >
-            {subHeaderItem.name}
+            {v.name}
           </span>
         );
       })}

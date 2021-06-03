@@ -1,10 +1,16 @@
-import React, { FC, useState } from 'react';
-import style from './tableResult.module.less';
-import { DetailResult } from './TooltipAndInterval';
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-05 13:46:47
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-20 17:37:21
+ * @FilePath: /play-back/src/components/tableResult/TableResult.tsx
+ */
 
-const COUNT_ACCURACY = 1;
-const WARNING_NUMBER_MAXIMUM = 3;
-const WARNING_INDEX_MAXIMUM = 2;
+import { FC, useState } from "react";
+import style from "./tableResult.module.less";
+import { DetailResult } from "./TooltipAndInterval";
+
 interface TableResultProps {
   detail: ResultDetailProps;
 }
@@ -14,73 +20,43 @@ interface ResultDetailProps {
   finishCode: string;
   placedInDest: number;
   orderNumber: number;
-  targetstatus: Record<string, unknown>[];
+  targetstatus: any[];
+  //targetstatus:Array<any>;
   status: string;
   cycleElapsedProcessingTime: number;
-  cycleStatistics: { executed: Record<string, unknown>[] }
+  [other: string]: any;
 }
 
 interface PreparationProps {
   finishCode: string;
 }
 
-interface OrderProps extends Record<string, unknown> {
+interface OrderProps {
   finishCode: string;
   placedInDest: number;
   OrderNumber: number;
-  targetstatus: Record<string, unknown>[];
+  targetstatus: any[];
   status: string;
   cycleElapsedProcessingTime: number;
 }
 
-// This function is to extract the warning and its corresponding appear time
-export const getWarningObject = (
-  targetstatusList: Record<string, unknown>[],
-): object => {
-  if(!targetstatusList){
-    const warningToTimes: Record<string, number> = {};
-    return warningToTimes;
-  }
-  let warningList: string[] = [];
-  for (const status of targetstatusList) {
-    if (status.targetstatus !== 'success') {
-      warningList.push((status as { targetstatus: string }).targetstatus);
-      // targetstatus={(detail?.cycleStatistics as { executed: Record<string, unknown>[] })?.executed}
-    }
-  }
-  // turn [a, b, c, a] into {a:2, b:1, c:1}
-  const warningToTimes: Record<string, number> = {};
-  for (
-    let warningIndex = 0;
-    warningIndex < warningList.length;
-    warningIndex++
-  ) {
-    if (!warningToTimes[warningList[warningIndex]]) {
-      warningToTimes[warningList[warningIndex]] = 1;
-    } else {
-      warningToTimes[warningList[warningIndex]] =
-        warningToTimes[warningList[warningIndex]] + 1;
-    }
-  }
-  return warningToTimes;
-};
-
 const Preparation: FC<PreparationProps> = ({ finishCode }) => {
   let isSuccess: boolean;
-  if (finishCode === 'PreparationFinishedSuccess') {
+  if (finishCode === "PreparationFinishedSuccess") {
     isSuccess = true;
   } else {
     isSuccess = false;
   }
   return (
     <div>
-      <span className={style.labelOrderStatus}>Order Status</span>
+      <span className={style.labelName} style={{ paddingLeft: "10px" }}>
+        Order Status
+      </span>
       <span
         className={
-          isSuccess
-            ? style.statusPreparationSpanSuccess
-            : style.statusPreparationSpanNoSuccess
+          isSuccess ? style.statusSpanSuccess : style.statusSpanNoSuccess
         }
+        style={{ marginLeft: "35px" }}
       >
         {finishCode}
       </span>
@@ -96,27 +72,42 @@ const Order: FC<OrderProps> = ({
   status,
   cycleElapsedProcessingTime,
 }) => {
-  const renderWarning = (targetstatus: Record<string, unknown>[]) => {
+  const renderWarning = (targetstatus: any[]) => {
+    let warningList: string[] = [];
+    for (const v of targetstatus) {
+      if (v.targetstatus !== "success") {
+        warningList.push(v.targetstatus);
+      }
+    }
 
-    
+    const fun = (arr: string[]): object => {
+      const obj: any = {};
+      for (let i = 0; i < arr.length; i++) {
+        if (!obj[arr[i]]) {
+          obj[arr[i]] = 1;
+        } else {
+          obj[arr[i]] = obj[arr[i]] + 1;
+        }
+      }
+      return obj;
+    };
+    const obj: object = fun(warningList);
 
-    const warningToTimes: object = getWarningObject(targetstatus);
-
-    if (Object.keys(warningToTimes).length) {
+    if (Object.keys(obj).length) {
       return (
         <li>
           <span className={style.labelName}>Error</span>
-          {Object.keys(warningToTimes).length > WARNING_NUMBER_MAXIMUM ? (
+          {Object.keys(obj).length > 3 ? (
             <>
-              {Object.keys(warningToTimes).map((warningItem, waringIndex) => {
-                if (waringIndex > WARNING_INDEX_MAXIMUM) {
+              {Object.keys(obj).map((v, i) => {
+                if (i > 2) {
                   return null;
                 }
                 return (
-                  <span key={waringIndex}>
+                  <span key={i}>
                     <br />
                     <span>
-                      {warningItem}×{Object.values(warningToTimes)[waringIndex]}
+                      {v}×{Object.values(obj)[i]}
                     </span>
                   </span>
                 );
@@ -127,12 +118,12 @@ const Order: FC<OrderProps> = ({
               </span>
             </>
           ) : (
-            Object.keys(warningToTimes).map((warningItem, waringIndex) => {
+            Object.keys(obj).map((v, i) => {
               return (
-                <span key={waringIndex}>
+                <span key={i}>
                   <br />
                   <span>
-                    {warningItem}×{Object.values(warningToTimes)[waringIndex]}
+                    {v}×{Object.values(obj)[i]}
                   </span>
                 </span>
               );
@@ -155,7 +146,7 @@ const Order: FC<OrderProps> = ({
           <span className={style.labelName}>Order Status</span>
           <span
             className={
-              finishCode === 'FinishedOrderComplete'
+              finishCode === "FinishedOrderComplete"
                 ? style.statusSpanSuccess
                 : style.statusSpanNoSuccess
             }
@@ -168,16 +159,12 @@ const Order: FC<OrderProps> = ({
           <li>
             <span className={style.labelName}>Pick speed</span>
             <span className={style.pickSpan}>
-              {(cycleElapsedProcessingTime / placedInDest).toFixed(
-                COUNT_ACCURACY,
-              )}
+              {(cycleElapsedProcessingTime / placedInDest).toFixed(1)}
             </span>
             <span className={style.unit}> sec/pick</span>
             <br />
-            <span className={style.pickSpeedSpan}>
-              {(3600 / (cycleElapsedProcessingTime / placedInDest)).toFixed(
-                COUNT_ACCURACY,
-              )}
+            <span className={style.pickSpan} style={{ marginLeft: "95px" }}>
+              {(3600 / (cycleElapsedProcessingTime / placedInDest)).toFixed(1)}
             </span>
             <span className={style.unit}> pick/hour</span>
           </li>
@@ -193,18 +180,15 @@ const Order: FC<OrderProps> = ({
 const TableResult: FC<TableResultProps> = ({ detail }) => {
   const [mouseEvent, setMouseEvent] = useState<boolean>(false);
   const renderChild = (detail: ResultDetailProps) => {
-    if (detail.cycleType === 'preparation') {
+    if (detail.cycleType === "preparation") {
       return <Preparation finishCode={detail.finishCode} />;
-    } else if (detail.cycleType === 'order') {
+    } else if (detail.cycleType === "order") {
       return (
         <Order
           finishCode={detail.finishCode}
           placedInDest={detail.placedInDest}
           OrderNumber={detail.orderNumber}
-          targetstatus={
-            (detail?.cycleStatistics as { executed: Record<string, unknown>[] })
-              ?.executed
-          }
+          targetstatus={detail?.cycleStatistics?.executed}
           status={detail.status}
           cycleElapsedProcessingTime={detail.cycleElapsedProcessingTime}
         />
@@ -217,27 +201,24 @@ const TableResult: FC<TableResultProps> = ({ detail }) => {
     <div
       onMouseEnter={() => setMouseEvent(true)}
       onMouseLeave={() => setMouseEvent(false)}
-      className={
-        detail.cycleType === 'order' && mouseEvent
-          ? style.tableResultMouse
-          : style.tableResult
+      className={style.tableResult}
+      style={
+        detail.cycleType === "order" && mouseEvent
+          ? { backgroundColor: "black" }
+          : {}
       }
     >
       <div
-        className={
-          detail.cycleType === 'order' && mouseEvent
-            ? style.showDetailResult
-            : style.noStyle
-        }
+        style={{
+          display:
+            detail.cycleType === "order" && mouseEvent ? "block" : "none",
+        }}
       >
         <DetailResult
           finishCode={detail.finishCode}
           placedInDest={detail.placedInDest}
           orderNumber={detail.orderNumber}
-          targetstatus={
-            (detail?.cycleStatistics as { executed: Record<string, unknown>[] })
-              ?.executed
-          }
+          targetstatus={detail?.cycleStatistics?.executed}
           status={detail.status}
           cycleElapsedProcessingTime={detail.cycleElapsedProcessingTime}
         />

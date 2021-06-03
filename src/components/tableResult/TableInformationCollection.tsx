@@ -1,46 +1,40 @@
-import React, { FC } from "react";
+/*
+ * @Descripttion: This file include 4 patt information, which are TableTime, CycleInfo, OrderInfo and OrderDetails
+ * @Author: Wei
+ * @Date: 2021-05-20 16:31:04
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-20 17:29:23
+ * @FilePath: /play-back/src/components/table/TableInformationCollection.tsx
+ */
+import { FC } from "react";
 import style from "./tableInformationCollection.module.less";
 
-// index of the time information of Json for slicing
-enum TimeSliceIndex{
-  START_TIME = 11,
-  END_TIME = 19,
-  START_MONTH = 5,
-  END_MONTH = 7,
-  START_DATE = 8,
-  END_DATE = 10,
-  START_YEAR = 2,
-  END_YEAR = 4,
-}
-const TIME_TRANSFER = 1000;
-const NUMBER_ACCURACY = 2;
-
-// TableTime Interface
+//TableTime Interface
 interface TableTimeProps {
   cycleStartProcessingTime: number;
   cycleFinishProcessingTime: number;
   cycleElapsedProcessingTime: number;
 }
 
-// TableCycleInfo Interface
+//TableCycleInfo Interface
 interface TableCycleInfoProps {
   cycleIndex: string;
   cycleType: string;
 }
 
-// TableOrderInfo Interface
+//TableOrderInfo Interface
 interface TableOrderInfoProps {
   controllerclientindex: string;
   isPrepared: boolean;
   ignoreFinishPosition: boolean;
 }
 
-// TableOrderDetails Interface
+//TableOrderDetails Interface
 interface TableOrderDetailsProps {
   targetname: string;
-  details?: OrderDetails;
+  details: OrderDetails;
 }
-export interface OrderDetails {
+interface OrderDetails {
   orderGroupId: string;
   orderNumPickLocations: number;
   orderPickContainerIds: string;
@@ -50,14 +44,14 @@ export interface OrderDetails {
   orderPlaceContainerTypes: string;
 }
 
-// TableTime Subcomponent
+//TableTime Subcomponent
 const TableTime: FC<TableTimeProps> = ({
   cycleStartProcessingTime,
   cycleFinishProcessingTime,
   cycleElapsedProcessingTime,
 }) => {
-  let started = new Date(cycleStartProcessingTime * TIME_TRANSFER).toISOString();
-  let ended = new Date(cycleFinishProcessingTime * TIME_TRANSFER).toISOString();
+  let started = new Date(cycleStartProcessingTime * 1000).toISOString();
+  let ended = new Date(cycleFinishProcessingTime * 1000).toISOString();
   let interval = cycleElapsedProcessingTime;
   return (
     <div className={style.tableTime}>
@@ -73,19 +67,19 @@ const TableTime: FC<TableTimeProps> = ({
       </div>
       <div className={style.timeShow}>
         <div className={style.startEnd}>
-          <p>{started.slice(TimeSliceIndex.START_TIME, TimeSliceIndex.END_TIME)}</p>
+          <p>{started.slice(11, 19)}</p>
           <p>
-            {started.slice(TimeSliceIndex.START_MONTH, TimeSliceIndex.END_MONTH)}/{started.slice(TimeSliceIndex.START_DATE, TimeSliceIndex.END_DATE)}/{started.slice(TimeSliceIndex.START_YEAR, TimeSliceIndex.END_YEAR)}
+            {started.slice(5, 7)}/{started.slice(8, 10)}/{started.slice(2, 4)}
           </p>
         </div>
         <div className={style.interval}>
-          <p>{interval.toFixed(NUMBER_ACCURACY)}</p>
+          <p>{interval.toFixed(2)}</p>
           <p className={style.unit}>sec</p>
         </div>
         <div className={style.startEnd}>
-          <p>{ended.slice(TimeSliceIndex.START_TIME, TimeSliceIndex.END_TIME)}</p>
+          <p>{ended.slice(11, 19)}</p>
           <p>
-            {ended.slice(TimeSliceIndex.START_MONTH, TimeSliceIndex.END_MONTH)}/{ended.slice(TimeSliceIndex.START_DATE, TimeSliceIndex.END_DATE)}/{ended.slice(TimeSliceIndex.START_YEAR, TimeSliceIndex.END_YEAR)}
+            {ended.slice(5, 7)}/{ended.slice(8, 10)}/{ended.slice(2, 4)}
           </p>
         </div>
       </div>
@@ -93,7 +87,7 @@ const TableTime: FC<TableTimeProps> = ({
   );
 };
 
-// TableCycleInfo Subcomponent
+//TableCycleInfo Subcomponent
 const TableCycleInfo: FC<TableCycleInfoProps> = ({ cycleIndex, cycleType }) => {
   let isOrder: boolean;
   if (cycleType === "preparation") {
@@ -124,7 +118,7 @@ const TableCycleInfo: FC<TableCycleInfoProps> = ({ cycleIndex, cycleType }) => {
   );
 };
 
-// TableOrderInfo Subcomponent
+//TableOrderInfo Subcomponent
 const TableOrderInfo: FC<TableOrderInfoProps> = ({
   controllerclientindex,
   isPrepared,
@@ -162,7 +156,7 @@ const TableOrderInfo: FC<TableOrderInfoProps> = ({
   );
 };
 
-// TableOrderDetails Subcomponent
+//TableOrderDetails Subcomponent
 const TableOrderDetails: FC<TableOrderDetailsProps> = ({
   targetname,
   details,
@@ -172,7 +166,7 @@ const TableOrderDetails: FC<TableOrderDetailsProps> = ({
       <div className={style.orderDetailsItem}>
         <p>
           <span>OrderGroupId</span>
-          <span>{details?.orderGroupId}</span>
+          <span>{details.orderGroupId}</span>
         </p>
 
         <p>
@@ -187,15 +181,15 @@ const TableOrderDetails: FC<TableOrderDetailsProps> = ({
           <ul>
             <li>
               <span>Location</span>
-              <span>{details?.orderNumPickLocations}</span>
+              <span>{details.orderNumPickLocations}</span>
             </li>
             <li>
               <span>ContainerID</span>
-              <span>{details?.orderPickContainerIds}</span>
+              <span>{details.orderPickContainerIds}</span>
             </li>
             <li>
               <span>ContainerType</span>
-              <span>{details?.orderPickContainerTypes}</span>
+              <span>{details.orderPickContainerTypes}</span>
             </li>
           </ul>
         </div>
@@ -205,15 +199,15 @@ const TableOrderDetails: FC<TableOrderDetailsProps> = ({
           <ul>
             <li>
               <span>Location</span>
-              <span>{details?.orderNumPlaceLocations}</span>
+              <span>{details.orderNumPlaceLocations}</span>
             </li>
             <li>
               <span>ContainerID</span>
-              <span>{details?.orderPlaceContainerIds}</span>
+              <span>{details.orderPlaceContainerIds}</span>
             </li>
             <li>
               <span>ContainerType</span>
-              <span>{details?.orderPlaceContainerTypes}</span>
+              <span>{details.orderPlaceContainerTypes}</span>
             </li>
           </ul>
         </div>

@@ -1,6 +1,15 @@
-// / <reference types="node" />
-// / <reference types="react" />
-// / <reference types="react-dom" />
+/*
+ * @Descripttion:
+ * @version: v0.0.1
+ * @Author: 静哥哥
+ * @Date: 2021-04-21 23:26:14
+ * @LastEditors: 静哥哥
+ * @LastEditTime: 2021-04-21 23:53:19
+ * @FilePath: \antd-demo-ts\src\react-app-env.d.ts
+ */
+/// <reference types="node" />
+/// <reference types="react" />
+/// <reference types="react-dom" />
 
 declare namespace NodeJS {
   interface ProcessEnv {

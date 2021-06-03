@@ -1,9 +1,8 @@
-@import (reference) '~@mujin/uicomponents/less/palette.less';
+@import (reference) "~@mujin/uicomponents/less/palette.less";
 @property: @gray;
 @value: @white;
 
-.labelName,
-.labelOrderStatus {
+.labelName {
   width: 80px;
 
   color: @property;
@@ -12,12 +11,7 @@
   font-size: 12px;
 }
 
-.labelOrderStatus {
-  padding-left: 10px;
-}
-
-.tableResult,
-.tableResultMouse {
+.tableResult {
   height: auto;
 
   display: flex;
@@ -25,7 +19,7 @@
   justify-content: flex-start;
   align-items: center;
 
-  position: 'relative';
+  position: "relative";
 
   color: @property;
 
@@ -34,7 +28,7 @@
   }
 
   div li {
-    // every list will have 3px top/bottom padding
+    //every list will have 3px top/bottom padding
     padding: 3px 0px;
 
     span span {
@@ -47,9 +41,8 @@
     }
   }
 
-  .pickSpan,
-  .pickSpeedSpan {
-    // the second span is different depending on the first span label
+  .pickSpan {
+    //the second span is different depending on the first span label
     margin-left: 15px;
 
     color: @value;
@@ -58,14 +51,8 @@
     font-size: 14px;
   }
 
-  .pickSpeedSpan {
-    margin-left: 95px;
-  }
-
   .statusSpanSuccess,
-  .statusSpanNoSuccess,
-  .statusPreparationSpanSuccess,
-  .statusPreparationSpanNoSuccess {
+  .statusSpanNoSuccess {
     padding: 9px 4px;
     margin: 10px;
 
@@ -75,39 +62,17 @@
     font-size: 12px;
   }
 
-  .statusSpanSuccess,
-  .statusPreparationSpanSuccess {
-    // the second span is different depending on the first span label
+  .statusSpanSuccess {
+    //the second span is different depending on the first span label
     color: @green;
     background-color: #244b31;
     border: 1px #244b31 solid;
   }
 
-  .statusSpanNoSuccess,
-  .statusPreparationSpanNoSuccess {
-    // the second span is different depending on the first span label
+  .statusSpanNoSuccess {
+    //the second span is different depending on the first span label
     color: @red;
     background-color: rgba(218, 14, 17, 0.2);
     border: 1px rgba(218, 14, 17, 0.2) solid;
   }
-
-  .statusPreparationSpanSuccess {
-    margin-left: 35px;
-  }
-
-  .statusPreparationSpanNoSuccess {
-    margin-left: 35px;
-  }
-}
-
-.tableResultMouse {
-  background-color: black;
-}
-
-.showDetailResult {
-  display: block;
-}
-
-.noStyle {
-  display: none;
 }

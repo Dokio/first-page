@@ -1,44 +1,38 @@
-import React, { FC, useState } from "react";
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-05-01 16:26:22
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-28 09:16:28
+ * @FilePath: /play-back/src/components/QuerySearch.tsx
+ */
+import { FC, useState } from "react";
 import style from "./querySearch.module.less";
 import { Dropdown } from "antd";
 import { Button, Icons } from "@mujin/uicomponents";
 import { FilterProps } from "../containers/LandingPage";
 import FilterSearch from "./timeAndSearch/FilterSearch";
-import { TimeZone } from "./timeAndSearch/TimePicker";
+import { TimePicker } from "./timeAndSearch/TimePicker";
 
-interface NavigationTab {
+interface QuerySearchTab {
   name: string;
   checked: boolean;
-  clickEvent: () => void;
-  iconChecked: JSX.Element;
-  iconNotChecked: JSX.Element;
+  fun: () => void;
+  iconChecked: any;
+  iconNotChecked: any;
 }
 
-enum NavigationNames {
+enum E_TAB {
   timeline = "Timeline",
   list = "List",
 }
-
-interface FilterParams {
-  cycleTypes: string[];
-  cycleIndexCheckBox: boolean;
-  cycleIndexInput: string;
-  finishCodeCheckBox: boolean;
-  finishCodeInput: string;
-  groupIdCheckBox: boolean;
-  groupIdInput: string;
-  partTypeCheckBox: boolean;
-  partTypeInput: string;
-}
-
-
-const QuerySearch: FC<FilterProps> = (filterSearchProps) => {
-  const { filterSearchParams } = filterSearchProps;
-  const [navigationList, setNavigationList] = useState<NavigationTab[]>([
+const QuerySearch: FC<FilterProps> = (props) => {
+  const { params } = props;
+  const [tab, setTab] = useState<QuerySearchTab[]>([
     {
-      name: NavigationNames["timeline"],
+      name: E_TAB["timeline"],
       checked: true,
-      clickEvent: () => handleClickTimeline(),
+      fun: () => handleClickTimeline(),
       iconChecked: (
         <Icons.ListView className={style.mujinIcon} primaryColor={"#FF5C33"} />
       ),
@@ -47,9 +41,9 @@ const QuerySearch: FC<FilterProps> = (filterSearchProps) => {
       ),
     },
     {
-      name: NavigationNames["list"],
+      name: E_TAB["list"],
       checked: false,
-      clickEvent: () => handleClickList(),
+      fun: () => handleClickList(),
       iconChecked: (
         <Icons.TimelineOutlined
           className={style.mujinIcon}
@@ -73,86 +67,88 @@ const QuerySearch: FC<FilterProps> = (filterSearchProps) => {
     console.log("Click List");
   };
 
-  const handleClick = (navigationElement: NavigationTab) => {
-    setNavigationList(
-      navigationList.map((navigationItem) => {
+  const handleClick = (v: QuerySearchTab) => {
+    setTab(
+      tab.map((item) => {
         return {
-          ...navigationItem,
-          checked: navigationItem.name === navigationElement.name,
+          ...item,
+          checked: item.name === v.name,
         };
       })
     );
   };
 
-  // FilterProps.params
-  const renderChild = (filterInformation: FilterParams) => {
+  const renderChild = (params: any) => {
     if (
-      filterInformation.cycleTypes.length ||
-      filterInformation.cycleIndexInput ||
-      filterInformation.groupIdInput ||
-      filterInformation.finishCodeInput
+      params.cycleTypes.length ||
+      params.cycleIndexInput ||
+      params.groupIdInput ||
+      params.finishCodeInput
     ) {
       return (
         <div className={style.queryInformation}>
-          {filterInformation.cycleTypes.length ? (
+          {params.cycleTypes.length ? (
             <div className={style.informationItem}>
               <span>Type : </span>
-              {filterInformation.cycleTypes.length === 3 ? (
+              {params.cycleTypes.length === 3 ? (
                 <span>
-                  {filterInformation.cycleTypes[0]}, {filterInformation.cycleTypes[1]},{" "}
-                  {filterInformation.cycleTypes[2]}
+                  {params.cycleTypes[0]}, {params.cycleTypes[1]},{" "}
+                  {params.cycleTypes[2]}
                 </span>
               ) : (
                 <span>
-                  {filterInformation.cycleTypes.length === 2 ? (
+                  {params.cycleTypes.length === 2 ? (
                     <span>
-                      {filterInformation.cycleTypes[0]}, {filterInformation.cycleTypes[1]}
+                      {params.cycleTypes[0]}, {params.cycleTypes[1]}
                     </span>
                   ) : (
-                    <span>{filterInformation.cycleTypes}</span>
+                    <span>{params.cycleTypes}</span>
                   )}
                 </span>
               )}
             </div>
           ) : null}
 
-          {filterInformation.finishCodeInput ? (
+          {params.finishCodeInput ? (
             <div className={style.informationItem}>
               <span>Code finish : </span>
-              <span>{filterInformation.finishCodeInput}</span>
+              <span>{params.finishCodeInput}</span>
             </div>
           ) : null}
 
-          {filterInformation.groupIdInput ? (
+          {params.groupIdInput ? (
             <div className={style.informationItem}>
               <span>Group ID : </span>
-              <span>{filterInformation.groupIdInput}</span>
+              <span>{params.groupIdInput}</span>
             </div>
           ) : null}
 
-          {filterInformation.cycleIndexInput ? (
+          {params.cycleIndexInput ? (
             <div className={style.informationItem}>
               <span>CycleIndex : </span>
-              <span>{filterInformation.cycleIndexInput}</span>
+              <span>{params.cycleIndexInput}</span>
             </div>
           ) : null}
 
-          {filterInformation.partTypeInput ? (
+          {params.partTypeInput ? (
             <div className={style.informationItem}>
               <span>PartType : </span>
-              <span>{filterInformation.partTypeInput}</span>
+              <span>{params.partTypeInput}</span>
             </div>
           ) : null}
         </div>
       );
     }
   };
+
   return (
     <div className={style.query}>
       <div className={style.queryTimeRange}>
         <div className={style.pAndItems}>
           <p>Date and time range:</p>
           <div className={style.queryTimeRangeItems}>
+            {/* <TimePicker /> */}
+
             <div className={style.iconBorder}>
               <Icons.CaretDownOutlined
                 className={style.mujinLeftIcon}
@@ -160,9 +156,9 @@ const QuerySearch: FC<FilterProps> = (filterSearchProps) => {
               />
             </div>
 
-            <div className={style.timezoneBorder}>
-              <TimeZone />
-            </div>
+            {/* <div className={style.timezoneBorder}> */}
+              <TimePicker />
+            {/* </div> */}
 
             <div className={style.iconBorder}>
               <Icons.CaretDownOutlined
@@ -185,35 +181,39 @@ const QuerySearch: FC<FilterProps> = (filterSearchProps) => {
               />
             </div>
 
-            <Dropdown overlay={<FilterSearch {...filterSearchProps} />} trigger={["click"]}>
+            <Dropdown overlay={<FilterSearch {...props} />} trigger={["click"]}>
               <div className={style.filterButton}>
                 <Button
                   onClick={function noRefCheck() {}}
                   text={"Filters"}
                   variant="secondary"
                   icon={<Icons.FilterFilled primaryColor={"#7F8392"} />}
-                  className={style.iconFilter}
+                  style={{ backgroundColor: "#000000", borderRadius: "2px" }}
                 />
               </div>
             </Dropdown>
           </div>
         </div>
-        {renderChild(filterSearchParams)}
+
+        {renderChild(params)}
       </div>
 
       <div className={style.querySignal}>
-        {navigationList.map((navigationItem) => {
+        {tab.map((v, i) => {
           return (
             <div
               className={style.querySignalButton}
-              key={navigationItem.name}
-              onClick={() => [navigationItem.clickEvent(), handleClick(navigationItem)]}
+              key={i}
+              onClick={() => [v.fun(), handleClick(v)]}
             >
-              {navigationItem.checked ? navigationItem.iconChecked : navigationItem.iconNotChecked}
+              {v.checked ? v.iconChecked : v.iconNotChecked}
+
               <p
-                className={navigationItem.checked ? style.checked : ""}
+                key={v.name}
+                className={v.checked ? style.checked : ""}
+                //onClick={() => [(v.fun)(), handleClick(v)]}
               >
-                {navigationItem.name}
+                {v.name}
               </p>
             </div>
           );

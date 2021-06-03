@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @Author: Wei
+ * @Date: 2021-04-20 23:20:40
+ * @LastEditors: Wei
+ * @LastEditTime: 2021-05-20 10:40:19
+ * @FilePath: /finalversion-for-playback/src/pages/playBack/LandingPage.tsx
+ */
 import React, { FC, useState } from "react";
 import LandingPageTable from "../components/LandingPageTable";
 import QuerySearch from "../components/QuerySearch";
@@ -17,12 +25,12 @@ interface FilterParams {
 }
 
 export interface FilterProps {
-  filterSearchParams: FilterParams;
-  setFilterSearchParams: React.Dispatch<React.SetStateAction<FilterParams>>;
+  params: FilterParams;
+  setParams: React.Dispatch<React.SetStateAction<FilterParams>>;
 }
 
 const LandingPage: FC = () => {
-  const [filterSearchParams, setFilterSearchParams] = useState<FilterParams>({
+  const [params, setParams] = useState<FilterParams>({
     cycleTypes: [],
     cycleIndexCheckBox: false,
     cycleIndexInput: "",
@@ -34,7 +42,7 @@ const LandingPage: FC = () => {
     partTypeInput: "",
   });
 
-  const filterProps = { filterSearchParams, setFilterSearchParams };
+  const filterProps = { params, setParams };
 
   return (
     <div className={style.landingPageBox}>

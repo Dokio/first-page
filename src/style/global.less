@@ -1,0 +1,70 @@
+@import (reference) "~@mujin/uicomponents/less/palette.less";
+
+.ant-checkbox-checked {
+  border-color: @orange;
+}
+
+.ant-checkbox-checked::after {
+  border: 1px solid @orange;
+}
+
+.ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-checkbox:hover .ant-checkbox-inner,
+.ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: @gray;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: @nero;
+  border-color: @gray;
+}
+
+.ant-checkbox-inner::after {
+  border: 2px solid @orange;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner::after {
+  display: table;
+
+  position: absolute;
+  transform: rotate(45deg) scale(1) translate(-50%, -50%);
+
+  border: 2px solid @orange;
+  border-top: 0;
+  border-left: 0;
+  opacity: 1;
+
+  content: " ";
+
+  transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+}
+
+// The modal style of play-back
+.ant-modal-content {
+  background-color: @nero;
+}
+
+.ant-modal-header {
+  background-color: @nero;
+  border-bottom: @nero solid 0px;
+}
+
+.ant-modal-title {
+  color: @white;
+
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ant-modal-body {
+  padding: 10px 24px;
+}
+
+.ant-modal-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  background-color: @nero;
+  border-top: @nero solid 0px;
+}

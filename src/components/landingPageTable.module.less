@@ -1,0 +1,110 @@
+@import (reference) "~@mujin/uicomponents/less/palette.less";
+
+.tableBox {
+  margin-right: 4px;
+  padding: 17px;
+
+  background-color: @nero;
+  border: 1px solid @nero;
+  border-radius: 5px;
+
+  table {
+    width: 100%;
+
+    background-color: @ebony;
+    background-color: @ebony;
+    border: 1px solid @white;
+    border-radius: 1px 1px 0px 0px;
+    border-collapse: collapse;
+
+    thead {
+      height: 48px;
+
+      color: @orange;
+      border-bottom: 1px solid @black;
+
+      th {
+        height: 40px;
+        padding: 4px 8px;
+        box-sizing: border-box;
+
+        position: relative;
+
+        color: @orange;
+
+        font-size: 16px;
+        font-weight: 500;
+        text-align: left;
+      }
+
+      // border
+      th::before {
+        content: "";
+
+        width: 1px;
+        height: 35px;
+
+        position: absolute;
+        left: 0px;
+        top: 2px;
+
+        background-color: @black;
+      }
+
+      th:first-child::before {
+        width: 0;
+      }
+    }
+
+    tbody {
+      td {
+        position: relative;
+        border-bottom: 1px solid @black;
+      }
+
+      td::before {
+        content: "";
+
+        width: 1px;
+        height: 95%;
+
+        position: absolute;
+        left: 0%;
+        top: 3%;
+
+        background-color: @black;
+      }
+
+      td:first-child::before {
+        width: 0;
+      }
+    }
+  }
+}
+
+.tableButton {
+  display: flex;
+  justify-content: space-evenly;
+
+  button {
+    padding: 9.5px 8px;
+
+    color: @white;
+    background-color: @black;
+    border: solid 1px @white;
+    border-radius: 5px;
+
+    font-size: 16px;
+  }
+
+  button:hover {
+    padding: 9.5px 8px;
+
+    color: @white;
+    background-color: @black;
+    border: solid 1px @orange;
+    border-radius: 5px;
+
+    font-size: 16px;
+  }
+}

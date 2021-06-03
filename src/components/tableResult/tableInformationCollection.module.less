@@ -1,0 +1,310 @@
+@import (reference) "~@mujin/uicomponents/less/palette.less";
+@property: @gray;
+@value: @white;
+
+.tableTime {
+  height: 168px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  .timeLabel {
+    height: 168px;
+    margin-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    position: relative;
+
+    color: @property;
+    font-size: 12px;
+    font-weight: 400;
+
+    &::after {
+      content: "";
+
+      height: calc(100% - 95px);
+
+      position: absolute;
+      left: 1px;
+      top: 46px;
+
+      border-right: 1px dashed @property;
+    }
+
+    .ballStart,
+    .ballEnd {
+      width: 4px;
+      height: 4px;
+      margin-right: 4px;
+      box-sizing: border-box;
+
+      display: inline-block;
+
+      top: 1px;
+
+      border-radius: 50%;
+      border: 1px solid @property;
+    }
+
+    .ballStart {
+      background-color: transparent;
+    }
+
+    .ballEnd {
+      background-color: @property;
+    }
+  }
+
+  .timeShow {
+    height: 168px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .startEnd {
+      color: @value;
+
+      p:nth-child(1) {
+        margin-bottom: 0px;
+        color: @value;
+        font-size: 14px;
+      }
+
+      p:nth-child(2) {
+        font-size: 12px;
+      }
+    }
+
+    .interval {
+      display: flex;
+      flex-direction: row;
+
+      color: @value;
+
+      font-size: 12px;
+
+      .unit {
+        margin-left: 5px;
+
+        color: @property;
+
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.cycleInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  color: @property;
+
+  ul {
+    padding-left: 25px;
+  }
+
+  li {
+    // every list will have 10px top/bottom padding
+    padding: 2px 0px;
+  }
+
+  li span:nth-child(1) {
+    // all the first span label is the same
+    color: @property;
+  }
+
+  .pickSpan {
+    // the second span is different depending on the first span label
+    margin-left: 15px;
+
+    color: @value;
+
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .typeSpan {
+    width: 70px;
+
+    display: inline-block;
+
+    color: @gray;
+  }
+
+  .statusSpanOrder,
+  .statusSpanPreparation {
+    padding: 3px 9px;
+    margin: 10px;
+
+    border-radius: 5px;
+
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  .statusSpanOrder {
+    // the second span is different depending on the first span label
+    color: #368cc8;
+    background-color: rgba(54, 140, 200, 0.2);
+    border: 1px rgba(54, 140, 200, 0.2) solid;
+  }
+
+  .statusSpanPreparation {
+    // the second span is different depending on the first span label
+    color: @orange;
+    background-color: rgba(215, 204, 200, 0.2);
+    border: 1px rgba(215, 204, 200, 0.2) solid;
+  }
+}
+
+.orderInfo {
+  ul {
+    padding-left: 25px;
+    color: @gray;
+
+    li {
+      padding: 2px 0px;
+      position: relative;
+    }
+
+    li span:nth-child(1) {
+      width: 110px;
+      display: inline-block;
+      color: @property;
+    }
+
+    .numberSpan {
+      color: @white;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    .signalSpanTrue,
+    .signalSpanFalse {
+      content: "";
+
+      width: 10px;
+      height: 10px;
+
+      display: inline-block;
+
+      position: absolute;
+      top: 35%;
+
+      border-radius: 50%;
+    }
+
+    .signalSpanTrue {
+      background: @green;
+      border: 1px solid white;
+    }
+
+    .signalSpanFalse {
+      background: @nero;
+      border: 1px solid @property;
+    }
+  }
+}
+
+.orderDetails {
+  &Item {
+    padding-left: 8px;
+    position: relative;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    p span:nth-child(1) {
+      width: 100px;
+
+      display: inline-block;
+
+      color: @property;
+
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    p span:nth-child(2) {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  &Item::after {
+    content: "";
+
+    height: 1px;
+    width: calc(100% - 20px);
+
+    position: absolute;
+    top: 48px;
+    right: 10px;
+
+    background-color: @black;
+  }
+
+  .pickAndPlace {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    p {
+      margin: 8px;
+      color: @property;
+      font-size: 25px;
+    }
+
+    .pickPlace {
+      p {
+        margin-bottom: 0;
+
+        color: @property;
+
+        font-weight: 500;
+        font-size: 12px;
+      }
+
+      ul {
+        padding-left: 25px;
+
+        color: @property;
+
+        font-weight: 500;
+        font-size: 12px;
+
+        li {
+          font-weight: 400;
+        }
+
+        li span:nth-child(1) {
+          width: 80px;
+
+          display: inline-block;
+          margin-left: 10px;
+
+          color: @property;
+        }
+
+        li span:nth-child(2) {
+          margin-left: 10px;
+
+          color: @value;
+
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

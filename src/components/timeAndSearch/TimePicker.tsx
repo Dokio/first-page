@@ -1,13 +1,5 @@
-/*
- * @Descripttion: TimeZone component is included in TimePicker component
- * @Author: Wei
- * @Date: 2021-05-03 23:24:09
- * @LastEditors: Wei
- * @LastEditTime: 2021-05-28 15:01:20
- * @FilePath: /play-back/src/components/timeAndSearch/TimePicker.tsx
- */
-// import { Button } from "@mujin/uicomponents";
-import { Calendar, DatePicker,Button } from "antd";
+import { Button } from "antd";
+import { Calendar, DatePicker } from "antd";
 import { useState } from "react";
 import { FC, Fragment } from "react";
 import TimezoneSelect from "react-timezone-select";
@@ -17,11 +9,18 @@ import TimeZoneData from '../../test/timezone.json'
 
 
 interface RelativeTimeProps {
-  name: string;
-  checked: boolean;
-  handleFun: () => void;
+  relativeTimeName: string;
+  relativeNameChecked: boolean;
+  handleClickRelativeTime: () => void;
 }
-enum RelativeTimeNames {
+
+interface RecentTimeProps {
+  recentTimeName: string;
+  recentNameChecked: boolean;
+  handleClickRecentTime: () => void;
+}
+
+enum RelativeTimeNamesList {
   lastFiveMinutes = 'Last 5 minites',
   lastThirtyMinutes = 'Last 30 minites',
   lastOneHour = 'Last 1 hours',
@@ -30,6 +29,13 @@ enum RelativeTimeNames {
   lastTwelveHours = 'Last 12 hours',
   lastTwentyFourHours = 'Last 24 hours',
 }
+
+enum RecenTimeNamesList {
+  recentTime1= '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
+  recentTime2 = '2021/04/08 10:00:00 to 2021/04/08 10:30:00',
+  recentTime3 = '2021/08/15 10:00:00 to 2021/08/20 10:30:00',
+}
+
 
 const { RangePicker } = DatePicker;
 const TimePicker: FC = () => {
@@ -40,7 +46,7 @@ const TimePicker: FC = () => {
           <Fragment>
             <div style={{ display: 'flex' }}>
               <TimeZone />
-              <RecentlyTime />
+              <RecentTime />
             </div>
 
             <RelativeTime />
@@ -99,7 +105,7 @@ const TimeZone: FC = () => {
           <Fragment>
             <Option value="Default">Default Japan, JST</Option>
             <Option value="Browser">Browser Time Japan, JST</Option>
-            <Option value="Coordinated" className="timezoneHeader">Coordinated Universal Time UTC, GMT</Option>S
+            <Option value="Coordinated" className="timezoneHeader">Coordinated Universal Time UTC, GMT</Option>
           </Fragment>
 
         </Select>,
@@ -109,55 +115,103 @@ const TimeZone: FC = () => {
   );
 };
 
-const RecentlyTime: FC = () => {
-  return (
-    <div className={style['recently-time']}>
-      <span>Recently used absoulte ranges</span>
-      <span>2021/01/11 00:00:00 to 2021/01/14 23:59:59</span>
-      <span>2021/04/08 10:00:00 to 2021/04/08 10:30:00</span>
-      <span>2021/08/15 10:00:00 to 2021/08/20 10:30:00</span>
-    </div>
+const RecentTime: FC = () => {
+  const [recenTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([
+    {
+      recentTimeName: RecenTimeNamesList['recentTime1'],
+      recentNameChecked: false,
+      handleClickRecentTime: () => handleClickRecentTime1(),
+    },
+    {
+      recentTimeName: RecenTimeNamesList['recentTime2'],
+      recentNameChecked: false,
+      handleClickRecentTime: () => handleClickRecentTime2(),
+    },
+    {
+      recentTimeName: RecenTimeNamesList['recentTime3'],
+      recentNameChecked: false,
+      handleClickRecentTime: () => handleClickRecentTime3(),
+    },
+    
+  ]);
 
+  const handleClickRecentTime1 = () =>{
+    console.log('RecentTime1')
+  }
+  const handleClickRecentTime2 = () =>{
+    console.log('RecentTime2')
+  }
+  const handleClickRecentTime3 = () =>{
+    console.log('RecentTime3')
+  }
+
+  const handleSelectRecentTime = (recentTimeItem: RecentTimeProps) => {
+    setRecenTimeList(
+      recenTimeList.map((recentTimeElement) => {
+        return {
+          ...recentTimeElement,
+          recentNameChecked: recentTimeElement.recentTimeName === recentTimeItem.recentTimeName,
+        };
+      })
+    )
+
+  }
+
+  return (
+    <div className={style['recent-time']}>
+      <span>Recently used absoulte ranges</span>
+      {
+        recenTimeList.map((recentTimeElement)=>
+          <span
+            key={recentTimeElement.recentTimeName}
+            onClick={()=>[recentTimeElement.handleClickRecentTime(),handleSelectRecentTime(recentTimeElement)]}
+            className={recentTimeElement.recentNameChecked? style.checked:''}
+          >
+            {recentTimeElement.recentTimeName}
+          </span>
+        )
+      }
+    </div>
   );
 };
 
 
 const RelativeTime: FC = () => {
-  const [RelativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
+  const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
     {
-      name: RelativeTimeNames['lastFiveMinutes'],
-      checked: false,
-      handleFun: () => handleClickLastFiveMinutes(),
+      relativeTimeName: RelativeTimeNamesList['lastFiveMinutes'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastFiveMinutes(),
     },
     {
-      name: RelativeTimeNames['lastThirtyMinutes'],
-      checked: false,
-      handleFun: () => handleClickLastThirtyMinutes(),
+      relativeTimeName: RelativeTimeNamesList['lastThirtyMinutes'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastThirtyMinutes(),
     },
     {
-      name: RelativeTimeNames['lastOneHour'],
-      checked: false,
-      handleFun: () => handleClickLastOneHour(),
+      relativeTimeName: RelativeTimeNamesList['lastOneHour'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastOneHour(),
     },
     {
-      name: RelativeTimeNames['lastThreeHours'],
-      checked: false,
-      handleFun: () => handleClickLastThreeHours(),
+      relativeTimeName: RelativeTimeNamesList['lastThreeHours'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastThreeHours(),
     },
     {
-      name: RelativeTimeNames['lastSixHours'],
-      checked: false,
-      handleFun: () => handleClickLastSixHours(),
+      relativeTimeName: RelativeTimeNamesList['lastSixHours'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastSixHours(),
     },
     {
-      name: RelativeTimeNames['lastTwelveHours'],
-      checked: false,
-      handleFun: () => handleClickLastTwelveHours(),
+      relativeTimeName: RelativeTimeNamesList['lastTwelveHours'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastTwelveHours(),
     },
     {
-      name: RelativeTimeNames['lastTwentyFourHours'],
-      checked: false,
-      handleFun: () => handleClickLastTwentyFourHours(),
+      relativeTimeName: RelativeTimeNamesList['lastTwentyFourHours'],
+      relativeNameChecked: false,
+      handleClickRelativeTime: () => handleClickLastTwentyFourHours(),
     },
   ]);
   const handleClickLastFiveMinutes = () => {
@@ -183,10 +237,10 @@ const RelativeTime: FC = () => {
   }
   const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeProps) => {
     setRelativeTimeList(
-      RelativeTimeList.map((relativeTimeElement) => {
+      relativeTimeList.map((relativeTimeElement) => {
         return {
           ...relativeTimeElement,
-          checked: relativeTimeElement.name === relativeTimeItem.name,
+          relativeNameChecked: relativeTimeElement.relativeTimeName === relativeTimeItem.relativeTimeName,
         };
       })
     )
@@ -196,13 +250,13 @@ const RelativeTime: FC = () => {
     <div className={style['relative-time']}>
       <span>Relative Time Range</span>
       {
-        RelativeTimeList.map((relativeTimeElement) =>
+        relativeTimeList.map((relativeTimeElement) =>
           <span
-            key={relativeTimeElement.name}
-            onClick={()=>[relativeTimeElement.handleFun(), handleSelectRelativeTime(relativeTimeElement)]}
-            className={relativeTimeElement.checked? style.checked:''}
+            key={relativeTimeElement.relativeTimeName}
+            onClick={()=>[relativeTimeElement.handleClickRelativeTime(), handleSelectRelativeTime(relativeTimeElement)]}
+            className={relativeTimeElement.relativeNameChecked? style.checked:''}
           >
-            {relativeTimeElement.name}
+            {relativeTimeElement.relativeTimeName}
           </span>
         )
       }

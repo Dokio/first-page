@@ -12,7 +12,7 @@ import style from "./landingPageTable.module.less";
 import TableResult from "./tableResult/TableResult";
 import JsonData from "../test/test.json";
 import { FilterProps } from "../containers/LandingPage";
-import { Button, Pagination } from "@mujin/uicomponents";
+import { Button, Pagination } from "antd";
 import useWebstackCycleLogQuery from "../hooks/WebstackCycleLogQuery";
 import {
   TableCycleInfo,
@@ -160,8 +160,8 @@ const LandingPageTable: FC<FilterProps> = (props) => {
                     <div className={style.tableButton}>
                       <Button
                         onClick={() => handleCopyJson(v)}
-                        text="Copy Json"
-                        variant="secondary"
+                        //text="Copy Json"
+                        //variant="secondary"
                         style={{
                           backgroundColor: "#2D2E31",
                           borderRadius: "5px",

@@ -9,10 +9,11 @@
 import { FC, useState } from "react";
 import style from "./querySearch.module.less";
 import { Dropdown } from "antd";
-import { Button, Icons } from "@mujin/uicomponents";
+import { Button } from "antd";
 import { FilterProps } from "../containers/LandingPage";
 import FilterSearch from "./timeAndSearch/FilterSearch";
 import { TimePicker } from "./timeAndSearch/TimePicker";
+import { SearchOutlined } from '@ant-design/icons';
 
 interface QuerySearchTab {
   name: string;
@@ -34,10 +35,10 @@ const QuerySearch: FC<FilterProps> = (props) => {
       checked: true,
       fun: () => handleClickTimeline(),
       iconChecked: (
-        <Icons.ListView className={style.mujinIcon} primaryColor={"#FF5C33"} />
+        <SearchOutlined />
       ),
       iconNotChecked: (
-        <Icons.ListView className={style.mujinIcon} primaryColor={"#7F8392"} />
+        <SearchOutlined />
       ),
     },
     {
@@ -45,16 +46,10 @@ const QuerySearch: FC<FilterProps> = (props) => {
       checked: false,
       fun: () => handleClickList(),
       iconChecked: (
-        <Icons.TimelineOutlined
-          className={style.mujinIcon}
-          primaryColor={"#FF5C33"}
-        />
+        <SearchOutlined />
       ),
       iconNotChecked: (
-        <Icons.TimelineOutlined
-          className={style.mujinIcon}
-          primaryColor={"#7F8392"}
-        />
+        <SearchOutlined />
       ),
     },
   ]);
@@ -150,10 +145,7 @@ const QuerySearch: FC<FilterProps> = (props) => {
             {/* <TimePicker /> */}
 
             <div className={style.iconBorder}>
-              <Icons.CaretDownOutlined
-                className={style.mujinLeftIcon}
-                primaryColor={"#7F8392"}
-              />
+            <SearchOutlined />
             </div>
 
             {/* <div className={style.timezoneBorder}> */}
@@ -161,33 +153,24 @@ const QuerySearch: FC<FilterProps> = (props) => {
             {/* </div> */}
 
             <div className={style.iconBorder}>
-              <Icons.CaretDownOutlined
-                className={style.mujinRightIcon}
-                primaryColor={"#7F8392"}
-              />
+            <SearchOutlined />
             </div>
 
             <div className={style.iconBorder2}>
-              <Icons.ZoomOutOutlined
-                className={style.mujinIcon}
-                primaryColor={"#7F8392"}
-              />
+            <SearchOutlined />
             </div>
 
             <div className={style.iconBorder2}>
-              <Icons.RefreshOutlined
-                className={style.mujinIcon}
-                primaryColor={"#7F8392"}
-              />
+            <SearchOutlined />
             </div>
 
             <Dropdown overlay={<FilterSearch {...props} />} trigger={["click"]}>
               <div className={style.filterButton}>
                 <Button
                   onClick={function noRefCheck() {}}
-                  text={"Filters"}
-                  variant="secondary"
-                  icon={<Icons.FilterFilled primaryColor={"#7F8392"} />}
+                  //text={"Filters"}
+                  //variant="secondary"
+                  icon={<SearchOutlined />} 
                   style={{ backgroundColor: "#000000", borderRadius: "2px" }}
                 />
               </div>

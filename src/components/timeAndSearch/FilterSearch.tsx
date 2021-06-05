@@ -12,8 +12,9 @@ import { Form, Checkbox } from "antd";
 // import style from '../querySearch.module.less'
 import style from "./filterSearch.module.less";
 import { CheckboxChangeEvent } from "antd/lib/checkbox/Checkbox";
-import { Button, Icons, Input } from "@mujin/uicomponents";
+import { Button, Input } from "antd";
 import { FilterProps } from "../../containers/LandingPage";
+import { SearchOutlined } from '@ant-design/icons';
 
 interface FilterSearchDisabledState {
   finishCodeDisabled: boolean;
@@ -204,14 +205,9 @@ const FilterSearch: FC<FilterProps> = (props) => {
           <Form.Item noStyle>
             <Button
               onClick={handleClearAll}
-              text="Clear all"
-              variant="secondary"
-              icon={
-                <Icons.CrossCircleFilled
-                  //className={style.mujin-icon}
-                  primaryColor={"#DA0E11"}
-                />
-              }
+              //text="Clear all"
+              //variant="secondary"
+              icon={<SearchOutlined />}
               style={{
                 backgroundColor: "@nero",
                 borderRadius: "5px",
@@ -221,8 +217,8 @@ const FilterSearch: FC<FilterProps> = (props) => {
 
             <Button
               onClick={handleApplyFilters}
-              text="Apply filters"
-              variant="secondary"
+              //text="Apply filters"
+              //variant="secondary"
               style={{
                 backgroundColor: "#2D2E31",
                 borderRadius: "5px",

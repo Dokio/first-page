@@ -31,7 +31,7 @@ enum RelativeTimeNamesList {
 }
 
 enum RecenTimeNamesList {
-  recentTime1= '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
+  recentTime1 = '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
   recentTime2 = '2021/04/08 10:00:00 to 2021/04/08 10:30:00',
   recentTime3 = '2021/08/15 10:00:00 to 2021/08/20 10:30:00',
 }
@@ -44,9 +44,8 @@ const TimePicker: FC = () => {
       <RangePicker
         renderExtraFooter={() =>
           <Fragment>
-              <TimeZone />
-              <RecentTime />
-              <RelativeTime />
+            <TimeZone />
+            <RecentAndRelative/>
             {/* <Button
               text="Apply time range"
               variant="secondary"
@@ -112,7 +111,7 @@ const TimeZone: FC = () => {
   );
 };
 
-const RecentTime: FC = () => {
+export const RecentAndRelative: FC = () => {
   const [recenTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([
     {
       recentTimeName: RecenTimeNamesList['recentTime1'],
@@ -129,16 +128,16 @@ const RecentTime: FC = () => {
       recentNameChecked: false,
       handleClickRecentTime: () => handleClickRecentTime3(),
     },
-    
+
   ]);
 
-  const handleClickRecentTime1 = () =>{
+  const handleClickRecentTime1 = () => {
     console.log('RecentTime1')
   }
-  const handleClickRecentTime2 = () =>{
+  const handleClickRecentTime2 = () => {
     console.log('RecentTime2')
   }
-  const handleClickRecentTime3 = () =>{
+  const handleClickRecentTime3 = () => {
     console.log('RecentTime3')
   }
 
@@ -154,25 +153,7 @@ const RecentTime: FC = () => {
 
   }
 
-  return (
-    <div className={style['recent-time']}>
-      <span>Recently used absoulte ranges</span>
-      {
-        recenTimeList.map((recentTimeElement)=>
-          <span
-            key={recentTimeElement.recentTimeName}
-            onClick={()=>[recentTimeElement.handleClickRecentTime(),handleSelectRecentTime(recentTimeElement)]}
-            className={recentTimeElement.recentNameChecked? style.checked:''}
-          >
-            {recentTimeElement.recentTimeName}
-          </span>
-        )
-      }
-    </div>
-  );
-};
-
-const RelativeTime: FC = () => {
+  /////////////////////////////////
   const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
     {
       relativeTimeName: RelativeTimeNamesList['lastFiveMinutes'],
@@ -243,22 +224,39 @@ const RelativeTime: FC = () => {
   }
 
   return (
-    <div className={style['relative-time']}>
-      <span>Relative Time Range</span>
-      {
-        relativeTimeList.map((relativeTimeElement) =>
-          <span
-            key={relativeTimeElement.relativeTimeName}
-            onClick={()=>[relativeTimeElement.handleClickRelativeTime(), handleSelectRelativeTime(relativeTimeElement)]}
-            className={relativeTimeElement.relativeNameChecked? style.checked:''}
-          >
-            {relativeTimeElement.relativeTimeName}
-          </span>
-        )
-      }
-    </div>
-  );
-};
+    <Fragment>
+      <div className={style['recent-time']}>
+        <span>Recently used absoulte ranges</span>
+        {
+          recenTimeList.map((recentTimeElement) =>
+            <span
+              key={recentTimeElement.recentTimeName}
+              onClick={() => [recentTimeElement.handleClickRecentTime(), handleSelectRecentTime(recentTimeElement)]}
+              className={recentTimeElement.recentNameChecked ? style.checked : ''}
+            >
+              {recentTimeElement.recentTimeName}
+            </span>
+          )
+        }
+      </div>
+      <div className={style['relative-time']}>
+        <span>Relative Time Range</span>
+        {
+          relativeTimeList.map((relativeTimeElement) =>
+            <span
+              key={relativeTimeElement.relativeTimeName}
+              onClick={() => [relativeTimeElement.handleClickRelativeTime(), handleSelectRelativeTime(relativeTimeElement)]}
+              className={relativeTimeElement.relativeNameChecked ? style.checked : ''}
+            >
+              {relativeTimeElement.relativeTimeName}
+            </span>
+          )
+        }
+      </div>
+    </Fragment>
+  )
+
+}
 
 
 

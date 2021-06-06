@@ -77,10 +77,12 @@
 }
 
 
-//the style of time picker
+the style of time picker
 .ant-picker-ranges{
   position: absolute;
-  left: 700px;
+  // left: 700px;
+  // top: 430px;
+  left:1700px;
   top: 430px;
   button{
     color: #D7DDE6;
@@ -114,7 +116,9 @@
 //the style of time picker after click
 .ant-picker-ranges{
   position: absolute;
-  left: 700px;
+  // left: 700px;
+  // top: 430px;
+  left: 1700px;
   top: 430px;
   button{
     color: #D7DDE6;
@@ -382,13 +386,50 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after{
   background-color:@gray;
 }
 
-//timezone button
-.ant-btn-primary{
-  background: #2D2E31;
+// //timezone button
+// .ant-btn-primary{
+//   background: #2D2E31;
+// }
+
+// .ant-btn-primary:hover, .ant-btn-primary:focus {
+//   color: #fff;
+//   background: #2D2E31;
+//   border-color: @orange;
+// }
+
+
+
+
+// 修改滚动条样式 ui
+::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+  /**/
+}
+::-webkit-scrollbar-track{
+  background: rgb(239, 239, 239);
+  border-radius:2px;
+}
+::-webkit-scrollbar-thumb{
+  background: #bfbfbf;
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background: #333;
+}
+::-webkit-scrollbar-corner{
+  background: #179a16;
 }
 
-.ant-btn-primary:hover, .ant-btn-primary:focus {
-  color: #fff;
-  background: #2D2E31;
-  border-color: @orange;
-}
+
+
+
+
+// 修改弹出日期确定按钮样式
+// .aaaaaaaaa {
+//   .ant-picker-footer {
+//     .ant-btn {
+//       color: red
+//     }
+//   }
+// }

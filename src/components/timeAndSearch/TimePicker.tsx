@@ -1,12 +1,10 @@
-import { Button } from "antd";
-import { Calendar, DatePicker } from "antd";
-import { useState } from "react";
-import { FC, Fragment } from "react";
+import React, { useEffect, useState, FC, Fragment } from "react";
+import { Calendar, DatePicker, Button, Select } from "antd";
 import TimezoneSelect from "react-timezone-select";
 import style from './timePicker.module.less';
-import { Select } from 'antd';
 import TimeZoneData from '../../test/timezone.json'
 import moment from "moment";
+import { any } from "prop-types";
 
 
 interface RelativeTimeProps {
@@ -51,21 +49,36 @@ enum RecenTimeNamesList {
 const { RangePicker } = DatePicker;
 const TimePicker: FC = () => {
   const [timeValue, setTimeValue] = useState<any>([]) //timeValue={[moment('2015/01/01'), moment('2015/01/01')]}
+  // const [open, setOpen] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   const otherclick = () => {
+  //     setOpen(false)
+  //   }
+  //   window.addEventListener("click", () => otherclick())
+  //   return window.removeEventListener("click", otherclick)
+  // }, [])//阻止冒泡 捕获
+
   return (
     <div>
       <RangePicker
+        dropdownClassName="aaaaaaaaa"
+        // open={open}
         value={timeValue}
         onChange={(selectedTimeValue) => setTimeValue(selectedTimeValue)}
         renderExtraFooter={() =>
           <Fragment>
             <TimeZone />
-            <RecentAndRelative setTimeValue={setTimeValue}/>
-            
-            {/* <Button
-              text="Apply time range"
-              variant="secondary"
+            <RecentAndRelative setTimeValue={setTimeValue} />
+
+            <Button
+            type="primary"
+              // text="Apply time range"
+              // variant="secondary"
               className={style['time-range-button']}
-            /> */}
+            >
+              Apply time range
+            </Button>
           </Fragment>
         }
         showTime
@@ -78,7 +91,8 @@ const TimePicker: FC = () => {
 };
 
 const TimeZone: FC = () => {
-  console.log(TimeZoneData)
+  // console.log(TimeZoneData)
+
   const { Option } = Select;
 
   function onChange(value: any) {
@@ -93,6 +107,19 @@ const TimeZone: FC = () => {
   function onSearch(val: any) {
     console.log('search:', val);
   }
+
+
+  //为了只执行一次所以用useEffect
+
+  // useEffect(() => {
+  //   console.log(TimeZoneData.countries)
+  //   let timeZoneContries: any[] = []
+  //   for (let i in (TimeZoneData.countries as any)) {
+  //     console.log((TimeZoneData.countries)[i])
+  //     // timeZoneContries.push((TimeZoneData.countries)[i])
+  //   }
+  // }, [])
+
   return (
     <div className={style['time-zone-box']}>
       <span>Time zone</span>
@@ -116,6 +143,12 @@ const TimeZone: FC = () => {
             <Option value="Default">Default Japan, JST</Option>
             <Option value="Browser">Browser Time Japan, JST</Option>
             <Option value="Coordinated" className="timezoneHeader">Coordinated Universal Time UTC, GMT</Option>
+            {/* <Option value="Andorra">Europe/Andorra <span style={{color:"red"}}>Andorra</span></Option> */}
+            {/* {
+              TimeZoneData.map((v: any) => {
+                return <Option value="Andorra">Europe/Andorra <span style={{ color: "red" }}>Andorra</span></Option>
+              })
+            } */}
           </Fragment>
 
         </Select>,
@@ -127,7 +160,7 @@ const TimeZone: FC = () => {
 
 
 
-export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
+export const RecentAndRelative: FC<RelativeTimeProps> = ({ setTimeValue }) => {
   /////////////////////////////////
   const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeElementProps[]>([
     {
@@ -174,6 +207,9 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     },
   ]);
 
+  //time history
+  const [timeHistoryList, setTimeHistoryList] = useState<any[]>([])
+
   const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeElementProps) => {
     const selectedTime: string = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
     //const selectedTime: string = JSON.stringify([moment().subtract(1.5, 'months'), moment()])
@@ -189,9 +225,11 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     let currentHistoryList: string[];
     if (typeof (localStorage.getItem('history_time_list')) !== "undefined") {
       currentHistoryList = JSON.parse(localStorage.getItem('history_time_list')!)
+      // console.log(currentHistoryList)
     } else {
       currentHistoryList = []
     }
+
 
     //将选中的时间范围，放入loca session中存储的历史时间列表中
     //1.当将选中的时间范围在列表中已经存在，那就将存在的值过滤掉，然后合并选中的时间和处理后的列表
@@ -207,6 +245,8 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
 
     //最后更新local session
     localStorage.setItem('history_time_list', JSON.stringify(currentHistoryList))
+
+    console.log(timeHistoryList)
   }
 
   const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeElementProps) => {
@@ -233,9 +273,6 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     ////1.让输入框显示的值为我们选中的值
     setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
   }
-
-
-
 
 
   /////////////////////////////////
@@ -280,11 +317,29 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
 
   }
 
+  useEffect(() => {
+    if ((localStorage.getItem('history_time_list'))) {
+      const timeStr: string[] = JSON.parse(localStorage.getItem('history_time_list')!);
+      // console.log(timeStr.map(v => JSON.parse(v)))
+      setTimeHistoryList(timeStr.map(v => JSON.parse(v)))
+    }
+
+  }, [])
+
   return (
     <Fragment>
       <div className={style['recent-time']}>
         <span>Recently used absoulte ranges</span>
         {
+          timeHistoryList.map((v, i) => {
+            return (
+              <span key={i}>
+                {v[0]} to {v[1]}
+              </span>
+            )
+          })
+        }
+        {/* {
           recenTimeList.map((recentTimeElement) =>
             <span
               key={recentTimeElement.recentTimeName}
@@ -294,7 +349,7 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
               {recentTimeElement.recentTimeName}
             </span>
           )
-        }
+        } */}
       </div>
       <div className={style['relative-time']}>
         <span>Relative Time Range</span>

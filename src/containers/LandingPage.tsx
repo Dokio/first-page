@@ -22,6 +22,8 @@ interface FilterParams {
   groupIdInput: string;
   partTypeCheckBox: boolean;
   partTypeInput: string;
+  cycleStartProcessingTime: number;
+  cycleFinishProcessingTime: number;
 }
 
 export interface FilterProps {
@@ -40,6 +42,8 @@ const LandingPage: FC = () => {
     groupIdInput: "",
     partTypeCheckBox: false,
     partTypeInput: "",
+    cycleStartProcessingTime: 1610016511.731559,
+    cycleFinishProcessingTime: 1610016518.196869
   });
 
   const filterProps = { params, setParams };

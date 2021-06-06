@@ -52,10 +52,15 @@ const LandingPageTable: FC<FilterProps> = (props) => {
         !params.groupIdInput &&
         !params.partTypeInput
       ) {
-        setDataSource(webstackData.objects);
+        
+        setDataSource(webstackData.objects.filter(v => {
+          console.log(v, params.cycleStartProcessingTime)
+          return  (params.cycleStartProcessingTime >= v.cycleStartProcessingTime && params.cycleFinishProcessingTime <= v.cycleFinishProcessingTime)
+        }));
       } else {
         setDataSource(
           webstackData.objects.filter((v) => {
+            console.log(v)
             return (
               (v.cycleIndex === params.cycleIndexInput ||
                 !params.cycleIndexInput) &&
@@ -64,7 +69,8 @@ const LandingPageTable: FC<FilterProps> = (props) => {
                 !params.finishCodeInput) &&
               (v.orderIds.orderGroupId === params.groupIdInput ||
                 !params.groupIdInput) &&
-              (v.targetname === params.partTypeInput || !params.partTypeInput)
+              (v.targetname === params.partTypeInput || !params.partTypeInput) && 
+              (params.cycleStartProcessingTime >= v.cycleStartProcessingTime && params.cycleFinishProcessingTime <= v.cycleFinishProcessingTime)
             );
           })
         );
@@ -103,12 +109,13 @@ const LandingPageTable: FC<FilterProps> = (props) => {
     //console.log(JsonData.objects?.filter((_, i) => i > pageParams.pageSize * (pageParams.page - 1)))
     setDataSource(
       JsonData?.objects?.filter(
-        (_, i) =>
+        (v, i) =>
           i > pageParams.pageSize * (pageParams.page - 1) &&
-          i < pageParams.pageSize * pageParams.page + 1
+          i < pageParams.pageSize * pageParams.page + 1 &&
+          (params.cycleStartProcessingTime >= v.cycleStartProcessingTime && params.cycleFinishProcessingTime <= v.cycleFinishProcessingTime)
       )
     );
-  }, [pageParams]);
+  }, [pageParams, params]);
 
   return (
     <div className={style.tableBox}>

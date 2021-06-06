@@ -9,11 +9,11 @@ import TimeZoneData from '../../test/timezone.json'
 import moment from "moment";
 
 
-interface RelativeTimeProps {
+interface RecentAndRelativeProps {
   setTimeValue: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-interface RelativeTimeElementProps {
+interface RelativeTimeProps {
   relativeTimeLabel: string;
   relativelabelChecked: boolean;
   timeScale: moment.unitOfTime.DurationConstructor;
@@ -40,13 +40,11 @@ enum RelativeTimeScale {
   timeMinute = "minute",
   timeHour = "hour",
 }
-
 enum RecenTimeNamesList {
   recentTime1 = '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
   recentTime2 = '2021/04/08 10:00:00 to 2021/04/08 10:30:00',
   recentTime3 = '2021/08/15 10:00:00 to 2021/08/20 10:30:00',
 }
-
 
 const { RangePicker } = DatePicker;
 const TimePicker: FC = () => {
@@ -59,8 +57,8 @@ const TimePicker: FC = () => {
         renderExtraFooter={() =>
           <Fragment>
             <TimeZone />
-            <RecentAndRelative setTimeValue={setTimeValue}/>
-            
+            <RecentAndRelative setTimeValue={setTimeValue} />
+
             {/* <Button
               text="Apply time range"
               variant="secondary"
@@ -125,11 +123,9 @@ const TimeZone: FC = () => {
   );
 };
 
-
-
-export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
+export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) => {
   /////////////////////////////////
-  const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeElementProps[]>([
+  const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
     {
       relativeTimeLabel: relativeTimeLabelsList['lastFiveMinutes'],
       relativelabelChecked: false,
@@ -174,8 +170,10 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     },
   ]);
 
-  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeElementProps) => {
+  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps) => {
     const selectedTime: string = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
+    console.log(111111)
+    console.log(selectedTime)
     //const selectedTime: string = JSON.stringify([moment().subtract(1.5, 'months'), moment()])
 
     //得到loca session中存储的历史时间列表
@@ -187,11 +185,12 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
 
     //const currentHistoryList: string[] = !localStorage.getItem('history_time_list') ? [] : JSON.parse(localStorage.getItem('history_time_list')!);
     let currentHistoryList: string[];
-    if (typeof (localStorage.getItem('history_time_list')) !== "undefined") {
-      currentHistoryList = JSON.parse(localStorage.getItem('history_time_list')!)
+    if (typeof (localStorage.getItem('history_time_list')) === "undefined" || localStorage.getItem('history_time_list') === null) {
+      currentHistoryList = ["[\"2021-06-06T04:34:07.766Z\",\"2021-06-06T04:39:07.766Z\"]"]
     } else {
-      currentHistoryList = []
+      currentHistoryList = JSON.parse(localStorage.getItem('history_time_list')!)
     }
+    //currentHistoryList = ["[\"2021-06-06T04:34:07.766Z\",\"2021-06-06T04:39:07.766Z\"]"]
 
     //将选中的时间范围，放入loca session中存储的历史时间列表中
     //1.当将选中的时间范围在列表中已经存在，那就将存在的值过滤掉，然后合并选中的时间和处理后的列表
@@ -209,7 +208,7 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     localStorage.setItem('history_time_list', JSON.stringify(currentHistoryList))
   }
 
-  const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeElementProps) => {
+  const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeProps) => {
     setRelativeTimeList(
       relativeTimeList.map((relativeTimeElement) => {
         return {
@@ -233,10 +232,6 @@ export const RecentAndRelative: FC<RelativeTimeProps> = ({setTimeValue}) => {
     ////1.让输入框显示的值为我们选中的值
     setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
   }
-
-
-
-
 
   /////////////////////////////////
   const [recenTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([

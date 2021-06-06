@@ -1,18 +1,34 @@
 import { Button } from "antd";
 import { Calendar, DatePicker } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FC, Fragment } from "react";
 import TimezoneSelect from "react-timezone-select";
 import style from './timePicker.module.less';
 import { Select } from 'antd';
 import TimeZoneData from '../../test/timezone.json'
 
+// 伪代码
+import moment from "moment";
 
-interface RelativeTimeProps {
-  relativeTimeName: string;
-  relativeNameChecked: boolean;
-  handleClickRelativeTime: () => void;
-}
+
+const TIMELIST = [
+  {
+    name: '最近5分钟',
+    value: 5,
+    level: 'minute'
+  },
+  {
+    name: '最近1天',
+    value: 1,
+    level: 'day'
+  },
+  {
+    name: '最近20tian',
+    value: 20,
+    level: 'day'
+  }
+]
+
 
 interface RecentTimeProps {
   recentTimeName: string;
@@ -20,36 +36,39 @@ interface RecentTimeProps {
   handleClickRecentTime: () => void;
 }
 
-enum RelativeTimeNamesList {
-  lastFiveMinutes = 'Last 5 minites',
-  lastThirtyMinutes = 'Last 30 minites',
-  lastOneHour = 'Last 1 hours',
-  lastThreeHours = 'Last 3 hours',
-  lastSixHours = 'Last 6 hours',
-  lastTwelveHours = 'Last 12 hours',
-  lastTwentyFourHours = 'Last 24 hours',
-}
 
 enum RecenTimeNamesList {
-  recentTime1= '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
+  recentTime1 = '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
   recentTime2 = '2021/04/08 10:00:00 to 2021/04/08 10:30:00',
   recentTime3 = '2021/08/15 10:00:00 to 2021/08/20 10:30:00',
 }
 
 
 const { RangePicker } = DatePicker;
+
 const TimePicker: FC = () => {
+
+  const [timeValue, setTimeValue] = useState<any>([])
+
+  // 变暗
+  const [dark, setDark] = useState<boolean>(false)
+
+  // 点击时间历史记录
+
   return (
     <div>
       <RangePicker
+        value={timeValue}
+        onChange={(val) => setTimeValue(val)} //数据更新->视图更新  react机制，绑定value（人工定义）后，进行视图显示，修改value->视图更新，
         renderExtraFooter={() =>
           <Fragment>
             <div style={{ display: 'flex' }}>
               <TimeZone />
-              <RecentTime />
+              <RecentTime dark={dark} />
             </div>
 
-            <RelativeTime />
+            <RelativeTime
+              setTimeValue={setTimeValue} />
             {/* <Button
               text="Apply time range"
               variant="secondary"
@@ -115,7 +134,23 @@ const TimeZone: FC = () => {
   );
 };
 
-const RecentTime: FC = () => {
+interface IRecentTimeProps {
+  dark: boolean;
+}
+
+const RecentTime: FC<IRecentTimeProps> = ({ dark }) => {
+
+  const [historyList, setHistoryList] = useState<any[]>([
+    {
+      lable: '2019-19-21 12:12:12',
+      checked: false
+    },
+    {
+      lable: '2019-19-21 12:12:12',
+      checked: false
+    }
+  ])
+
   const [recenTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([
     {
       recentTimeName: RecenTimeNamesList['recentTime1'],
@@ -132,16 +167,16 @@ const RecentTime: FC = () => {
       recentNameChecked: false,
       handleClickRecentTime: () => handleClickRecentTime3(),
     },
-    
+
   ]);
 
-  const handleClickRecentTime1 = () =>{
+  const handleClickRecentTime1 = () => {
     console.log('RecentTime1')
   }
-  const handleClickRecentTime2 = () =>{
+  const handleClickRecentTime2 = () => {
     console.log('RecentTime2')
   }
-  const handleClickRecentTime3 = () =>{
+  const handleClickRecentTime3 = () => {
     console.log('RecentTime3')
   }
 
@@ -157,15 +192,33 @@ const RecentTime: FC = () => {
 
   }
 
+  useEffect(() => {
+    console.log(localStorage.getItem('history_time_list'))
+  }, [])
+
+
+  useEffect(() => {
+    if (dark) {
+      setHistoryList(i => {
+        return i.map(v => {
+          return {
+            ...v,
+            checked: false
+          }
+        })
+      })
+    }
+  }, [dark])
+
   return (
     <div className={style['recent-time']}>
       <span>Recently used absoulte ranges</span>
       {
-        recenTimeList.map((recentTimeElement)=>
+        recenTimeList.map((recentTimeElement) =>
           <span
             key={recentTimeElement.recentTimeName}
-            onClick={()=>[recentTimeElement.handleClickRecentTime(),handleSelectRecentTime(recentTimeElement)]}
-            className={recentTimeElement.recentNameChecked? style.checked:''}
+            onClick={() => [recentTimeElement.handleClickRecentTime(), handleSelectRecentTime(recentTimeElement)]}
+            className={recentTimeElement.recentNameChecked ? style.checked : ''}
           >
             {recentTimeElement.recentTimeName}
           </span>
@@ -175,81 +228,39 @@ const RecentTime: FC = () => {
   );
 };
 
+interface IRelativeTimeProps {
+  setTimeValue: React.Dispatch<React.SetStateAction<any[]>>
+}
 
-const RelativeTime: FC = () => {
-  const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
-    {
-      relativeTimeName: RelativeTimeNamesList['lastFiveMinutes'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastFiveMinutes(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastThirtyMinutes'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastThirtyMinutes(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastOneHour'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastOneHour(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastThreeHours'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastThreeHours(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastSixHours'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastSixHours(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastTwelveHours'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastTwelveHours(),
-    },
-    {
-      relativeTimeName: RelativeTimeNamesList['lastTwentyFourHours'],
-      relativeNameChecked: false,
-      handleClickRelativeTime: () => handleClickLastTwentyFourHours(),
-    },
-  ]);
-  const handleClickLastFiveMinutes = () => {
-    console.log('lastFiveMinutes')
-  }
-  const handleClickLastThirtyMinutes = () => {
-    console.log('lastThirtyMinutes')
-  }
-  const handleClickLastOneHour = () => {
-    console.log('lastOneHour')
-  }
-  const handleClickLastThreeHours = () => {
-    console.log('lastThreeHours')
-  }
-  const handleClickLastSixHours = () => {
-    console.log('lastSixHours')
-  }
-  const handleClickLastTwelveHours = () => {
-    console.log('lastTwelveHours')
-  }
-  const handleClickLastTwentyFourHours = () => {
-    console.log('lastTwentyFourHours')
-  }
-  const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeProps) => {
-    setRelativeTimeList(
-      relativeTimeList.map((relativeTimeElement) => {
-        return {
-          ...relativeTimeElement,
-          relativeNameChecked: relativeTimeElement.relativeTimeName === relativeTimeItem.relativeTimeName,
-        };
-      })
-    )
+const RelativeTime: FC<IRelativeTimeProps> = ({ setTimeValue }) => {
+  // 伪代码
+  const handleTimeClick = (v: any) => {
+    setTimeValue([moment().subtract(v.value, v.level), moment()]);
+
+    const selectedTime: string = JSON.stringify([moment().subtract(v.value, v.level), moment()])
+
+    // 伪代码
+    const times: string[] = !localStorage.getItem('history_time_list') ? [] : JSON.parse(localStorage.getItem('history_time_list')!);
+
+    // 判断当前点击的时间是否在里面
+    // some() 判断数组李米娜是否有某个值，有的话返回一个true， 没有返回false
+    if (times.some(v => v === selectedTime)) {
+      localStorage.setItem('history_time_list', JSON.stringify([selectedTime].concat(times.filter(v => v !== selectedTime)))) //头部插入  //v !== selectedTime)把不等于的留下来
+    } else {
+      console.log('进行')
+      localStorage.setItem('history_time_list', JSON.stringify([selectedTime].concat(times).slice(0, 3))) //头部插入
+    }
   }
 
   return (
     <div className={style['relative-time']}>
       <span>Relative Time Range</span>
       {
+        TIMELIST.map(v => {
+          return <span key={v.value} onClick={() => handleTimeClick(v)}>{v.name}</span>
+        })
+      }
+      {/* {
         relativeTimeList.map((relativeTimeElement) =>
           <span
             key={relativeTimeElement.relativeTimeName}
@@ -259,7 +270,7 @@ const RelativeTime: FC = () => {
             {relativeTimeElement.relativeTimeName}
           </span>
         )
-      }
+      } */}
     </div>
   );
 };

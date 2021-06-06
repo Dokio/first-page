@@ -44,12 +44,9 @@ const TimePicker: FC = () => {
       <RangePicker
         renderExtraFooter={() =>
           <Fragment>
-            <div style={{ display: 'flex' }}>
               <TimeZone />
               <RecentTime />
-            </div>
-
-            <RelativeTime />
+              <RelativeTime />
             {/* <Button
               text="Apply time range"
               variant="secondary"
@@ -175,7 +172,6 @@ const RecentTime: FC = () => {
   );
 };
 
-
 const RelativeTime: FC = () => {
   const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
     {
@@ -263,5 +259,7 @@ const RelativeTime: FC = () => {
     </div>
   );
 };
+
+
 
 export { TimeZone, TimePicker };

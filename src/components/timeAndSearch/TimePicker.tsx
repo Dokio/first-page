@@ -6,7 +6,9 @@ import TimezoneSelect from "react-timezone-select";
 import style from './timePicker.module.less';
 import { Select } from 'antd';
 import TimeZoneData from '../../test/timezone.json'
-import moment from "moment";
+import moment, {Moment} from "moment";
+import type {RangeValue} from "rc-picker/lib/interface.d"
+
 
 
 const YEARMONTHDAY_START: number = 0;
@@ -15,7 +17,7 @@ const DAYHOURMINUTE_START: number = 11;
 const DAYHOURMINUTE_END: number = 19;
 
 interface RecentAndRelativeProps {
-  setTimeValue: React.Dispatch<React.SetStateAction<any[]>>;
+  setTimeValue: React.Dispatch<React.SetStateAction<RangeValue<moment.Moment> | undefined>>;
 }
 
 interface RelativeTimeProps {
@@ -49,11 +51,11 @@ enum RelativeTimeScale {
 const { RangePicker } = DatePicker;
 
 const TimePicker: FC = () => {
-  const [timeValue, setTimeValue] = useState<any>([]) //timeValue={[moment('2015/01/01'), moment('2015/01/01')]}
+  const [timeValue, setTimeValue] = useState<RangeValue<Moment>>() //timeValue={[moment('2015/01/01'), moment('2015/01/01')]}
   return (
     <div>
       <RangePicker
-        value={timeValue}
+        value={timeValue!}
         onChange={(selectedTimeValue) => setTimeValue(selectedTimeValue)}
         renderExtraFooter={() =>
           <Fragment>

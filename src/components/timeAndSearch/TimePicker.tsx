@@ -171,10 +171,13 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     },
   ]);
 
-  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps) => {
-    const selectedTime: string = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
-    console.log(selectedTime)
-    //const selectedTime: string = JSON.stringify([moment().subtract(1.5, 'months'), moment()])
+  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps | RecentTimeProps):void => {
+    let selectedTime: string;
+    if ('timeValue' in relativeTimeItem){
+      selectedTime = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
+    } else {
+      selectedTime = relativeTimeItem!.recentTimeValue
+    }
 
     //得到loca session中存储的历史时间列表
     //[
@@ -198,9 +201,9 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     if (currentHistoryList.some(currentHistoryListElement => currentHistoryListElement === selectedTime)) {
       //filter:把满足条件的留下来
       currentHistoryList = currentHistoryList.filter(currentHistoryListElement => currentHistoryListElement !== selectedTime)
-      currentHistoryList = [selectedTime].concat(currentHistoryList)
+      currentHistoryList = [selectedTime!].concat(currentHistoryList)
     } else {
-      currentHistoryList = [selectedTime].concat(currentHistoryList)
+      currentHistoryList = [selectedTime!].concat(currentHistoryList)
       currentHistoryList = currentHistoryList.slice(0, 3)
     }
 
@@ -256,10 +259,6 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       //object [["2021-06-07T00:16:10.497Z","2021-06-07T00:21:10.497Z"]]
     }
   }, [])
-  // recentTimeLabel: string;
-  // recentLabelChecked: boolean;
-  // recentTimeValue: string;
-
 
   const handleSelectRecentTime = (recentTimeItem: RecentTimeProps) => {
     setRecenTimeList(recentTimeList.map(recentTimeElement => (
@@ -278,7 +277,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
 
 
     //2.将选中的值存储到local session中
-    //updateHistoryOnLocalSession(recentTimeItem)
+    updateHistoryOnLocalSession(recentTimeItem)
 
     ////1.让输入框显示的值为我们选中的值
     //setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])

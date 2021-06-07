@@ -9,13 +9,6 @@ import TimeZoneData from '../../test/timezone.json'
 import moment, {Moment} from "moment";
 import type {RangeValue} from "rc-picker/lib/interface.d"
 
-
-
-const YEARMONTHDAY_START: number = 0;
-const YEARMONTHDAY_END: number = 10;
-const DAYHOURMINUTE_START: number = 11;
-const DAYHOURMINUTE_END: number = 19;
-
 interface RecentAndRelativeProps {
   setTimeValue: React.Dispatch<React.SetStateAction<RangeValue<moment.Moment> | undefined>>;
 }
@@ -236,6 +229,8 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
 
     ////1.让输入框显示的值为我们选中的值
     setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
+    console.log([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
+    console.log(JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()]))
   }
 
   ///////////////////////////////// Recent Time
@@ -247,7 +242,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       const historyTimeListString: string[] = JSON.parse(localStorage.getItem('historyTimeList')!);
       const historyTimeListStringParse: string[] = historyTimeListString.map(historyTimeItem => JSON.parse(historyTimeItem))
       setRecenTimeList(historyTimeListStringParse.map(historyTimeItem => ({
-        recentTimeLabel: historyTimeItem[0].slice(YEARMONTHDAY_START, YEARMONTHDAY_END) + ' ' + historyTimeItem[0].slice(DAYHOURMINUTE_START, DAYHOURMINUTE_END) + ' to ' + historyTimeItem[1].slice(YEARMONTHDAY_START, YEARMONTHDAY_END) + ' ' + historyTimeItem[1].slice(DAYHOURMINUTE_START, DAYHOURMINUTE_END),
+        recentTimeLabel:moment(historyTimeItem[0]).format('YYYY-MM-DD-HH:mm:ss')+" to "+moment(historyTimeItem[1]).format('YYYY-MM-DD-HH:mm:ss'),
         recentLabelChecked: false,
         recentTimeValue: historyTimeItem,
       })))
@@ -281,11 +276,10 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     //2.将选中的值存储到local session中
     updateHistoryOnLocalSession(recentTimeItem)
 
-    ////1.让输入框显示的值为我们选中的值
-    //setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
-
-
-
+    // 1.让输入框显示的值为我们选中的值
+    // console.log("turn string into moment")
+    // console.log(moment(recentTimeItem.recentTimeValue))
+    setTimeValue([moment(recentTimeItem.recentTimeValue[0]),moment(recentTimeItem.recentTimeValue[1])])
   }
 
   return (

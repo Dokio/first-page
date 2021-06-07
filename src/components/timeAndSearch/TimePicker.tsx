@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { Calendar, DatePicker } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FC, Fragment } from "react";
 import TimezoneSelect from "react-timezone-select";
 import style from './timePicker.module.less';
@@ -8,6 +8,11 @@ import { Select } from 'antd';
 import TimeZoneData from '../../test/timezone.json'
 import moment from "moment";
 
+
+const YEARMONTHDAY_START: number = 0;
+const YEARMONTHDAY_END: number = 10;
+const DAYHOURMINUTE_START: number = 11;
+const DAYHOURMINUTE_END: number = 19;
 
 interface RecentAndRelativeProps {
   setTimeValue: React.Dispatch<React.SetStateAction<any[]>>;
@@ -20,12 +25,12 @@ interface RelativeTimeProps {
   timeValue: number;
 }
 
-
 interface RecentTimeProps {
-  recentTimeName: string;
-  recentNameChecked: boolean;
-  handleClickRecentTime: () => void;
+  recentTimeLabel: string;
+  recentLabelChecked: boolean;
+  recentTimeValue: string;
 }
+
 
 enum relativeTimeLabelsList {
   lastFiveMinutes = 'Last 5 minites',
@@ -40,13 +45,9 @@ enum RelativeTimeScale {
   timeMinute = "minute",
   timeHour = "hour",
 }
-enum RecenTimeNamesList {
-  recentTime1 = '2021/01/11 00:00:00 to 2021/01/14 23:59:59',
-  recentTime2 = '2021/04/08 10:00:00 to 2021/04/08 10:30:00',
-  recentTime3 = '2021/08/15 10:00:00 to 2021/08/20 10:30:00',
-}
 
 const { RangePicker } = DatePicker;
+
 const TimePicker: FC = () => {
   const [timeValue, setTimeValue] = useState<any>([]) //timeValue={[moment('2015/01/01'), moment('2015/01/01')]}
   return (
@@ -76,7 +77,7 @@ const TimePicker: FC = () => {
 };
 
 const TimeZone: FC = () => {
-  console.log(TimeZoneData)
+  //console.log(TimeZoneData)
   const { Option } = Select;
 
   function onChange(value: any) {
@@ -124,7 +125,7 @@ const TimeZone: FC = () => {
 };
 
 export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) => {
-  /////////////////////////////////
+  ///////////////////////////////// Relative Time
   const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>([
     {
       relativeTimeLabel: relativeTimeLabelsList['lastFiveMinutes'],
@@ -172,7 +173,6 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
 
   const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps) => {
     const selectedTime: string = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
-    console.log(111111)
     console.log(selectedTime)
     //const selectedTime: string = JSON.stringify([moment().subtract(1.5, 'months'), moment()])
 
@@ -183,12 +183,12 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     //  "[\"2021-05-17T04:39:06.792Z\",\"2021-06-06T04:39:06.792Z\"]"
     //]
 
-    //const currentHistoryList: string[] = !localStorage.getItem('history_time_list') ? [] : JSON.parse(localStorage.getItem('history_time_list')!);
+    //const currentHistoryList: string[] = !localStorage.getItem('historyTimeList') ? [] : JSON.parse(localStorage.getItem('historyTimeList')!);
     let currentHistoryList: string[];
-    if (typeof (localStorage.getItem('history_time_list')) === "undefined" || localStorage.getItem('history_time_list') === null) {
+    if (typeof (localStorage.getItem('historyTimeList')) === "undefined" || localStorage.getItem('historyTimeList') === null) {
       currentHistoryList = ["[\"2021-06-06T04:34:07.766Z\",\"2021-06-06T04:39:07.766Z\"]"]
     } else {
-      currentHistoryList = JSON.parse(localStorage.getItem('history_time_list')!)
+      currentHistoryList = JSON.parse(localStorage.getItem('historyTimeList')!)
     }
     //currentHistoryList = ["[\"2021-06-06T04:34:07.766Z\",\"2021-06-06T04:39:07.766Z\"]"]
 
@@ -205,7 +205,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     }
 
     //最后更新local session
-    localStorage.setItem('history_time_list', JSON.stringify(currentHistoryList))
+    localStorage.setItem('historyTimeList', JSON.stringify(currentHistoryList))
   }
 
   const handleSelectRelativeTime = (relativeTimeItem: RelativeTimeProps) => {
@@ -219,7 +219,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     )
 
     setRecenTimeList(
-      recenTimeList.map((recentTimeElement) => {
+      recentTimeList.map((recentTimeElement) => {
         return {
           ...recentTimeElement,
           recentNameChecked: false,
@@ -233,45 +233,57 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
   }
 
-  /////////////////////////////////
-  const [recenTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([
-    {
-      recentTimeName: RecenTimeNamesList['recentTime1'],
-      recentNameChecked: false,
-      handleClickRecentTime: () => handleClickRecentTime1(),
-    },
-    {
-      recentTimeName: RecenTimeNamesList['recentTime2'],
-      recentNameChecked: false,
-      handleClickRecentTime: () => handleClickRecentTime2(),
-    },
-    {
-      recentTimeName: RecenTimeNamesList['recentTime3'],
-      recentNameChecked: false,
-      handleClickRecentTime: () => handleClickRecentTime3(),
-    },
+  ///////////////////////////////// Recent Time
+  const [recentTimeList, setRecenTimeList] = useState<RecentTimeProps[]>([])
 
-  ]);
+  // Every time When begin render, recent used time will get the history record from local session and renew the recenTimeList
+  useEffect(() => {
+    if (localStorage.getItem('historyTimeList')) {
+      const historyTimeListString: string[] = JSON.parse(localStorage.getItem('historyTimeList')!);
+      const historyTimeListStringParse: string[] = historyTimeListString.map(historyTimeItem => JSON.parse(historyTimeItem))
+      setRecenTimeList(historyTimeListStringParse.map(historyTimeItem => ({
+        recentTimeLabel: historyTimeItem[0].slice(YEARMONTHDAY_START, YEARMONTHDAY_END) + ' ' + historyTimeItem[0].slice(DAYHOURMINUTE_START, DAYHOURMINUTE_END) + ' to ' + historyTimeItem[1].slice(YEARMONTHDAY_START, YEARMONTHDAY_END) + ' ' + historyTimeItem[1].slice(DAYHOURMINUTE_START, DAYHOURMINUTE_END),
+        recentLabelChecked: false,
+        recentTimeValue: historyTimeItem,
+      })))
+      //console.log(localStorage.getItem('historyTimeList')!)
+      //string: ["[\"2021-06-07T00:16:10.497Z\",\"2021-06-07T00:21:10.497Z\"]"]
 
-  const handleClickRecentTime1 = () => {
-    console.log('RecentTime1')
-  }
-  const handleClickRecentTime2 = () => {
-    console.log('RecentTime2')
-  }
-  const handleClickRecentTime3 = () => {
-    console.log('RecentTime3')
-  }
+      //console.log(historyTimeListString)
+      //object; ["["2021-06-07T00:16:10.497Z","2021-06-07T00:21:10.497Z"]"]
+
+      //console.log(historyTimeListStringParse)
+      //object [["2021-06-07T00:16:10.497Z","2021-06-07T00:21:10.497Z"]]
+    }
+  }, [])
+  // recentTimeLabel: string;
+  // recentLabelChecked: boolean;
+  // recentTimeValue: string;
+
 
   const handleSelectRecentTime = (recentTimeItem: RecentTimeProps) => {
-    setRecenTimeList(
-      recenTimeList.map((recentTimeElement) => {
-        return {
-          ...recentTimeElement,
-          recentNameChecked: recentTimeElement.recentTimeName === recentTimeItem.recentTimeName,
-        };
-      })
-    )
+    setRecenTimeList(recentTimeList.map(recentTimeElement => (
+      {
+        ...recentTimeElement,
+        recentLabelChecked :recentTimeElement.recentTimeLabel === recentTimeItem.recentTimeLabel
+      }
+    )))
+
+    setRelativeTimeList(relativeTimeList.map(relativeTimeElement => (
+      {
+        ...relativeTimeElement,
+        relativelabelChecked:false,
+      }
+    )))
+
+
+    //2.将选中的值存储到local session中
+    //updateHistoryOnLocalSession(recentTimeItem)
+
+    ////1.让输入框显示的值为我们选中的值
+    //setTimeValue([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
+
+
 
   }
 
@@ -280,16 +292,18 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       <div className={style['recent-time']}>
         <span>Recently used absoulte ranges</span>
         {
-          recenTimeList.map((recentTimeElement) =>
+          recentTimeList.map(recentTimeItem=>(
             <span
-              key={recentTimeElement.recentTimeName}
-              onClick={() => [recentTimeElement.handleClickRecentTime(), handleSelectRecentTime(recentTimeElement)]}
-              className={recentTimeElement.recentNameChecked ? style.checked : ''}
+              key={recentTimeItem.recentTimeValue}
+              className={recentTimeItem.recentLabelChecked ? style.checked : ''}
+              onClick={() => [handleSelectRecentTime(recentTimeItem)]}
             >
-              {recentTimeElement.recentTimeName}
+              {recentTimeItem.recentTimeLabel}
+
             </span>
-          )
+          ))
         }
+        
       </div>
       <div className={style['relative-time']}>
         <span>Relative Time Range</span>

@@ -171,7 +171,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     if ('timeValue' in relativeTimeItem){
       selectedTime = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
     } else {
-      selectedTime = relativeTimeItem!.recentTimeValue
+      selectedTime = JSON.stringify(relativeTimeItem!.recentTimeValue)
     }
 
     //得到loca session中存储的历史时间列表
@@ -216,14 +216,12 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       })
     )
 
-    setRecenTimeList(
-      recentTimeList.map((recentTimeElement) => {
-        return {
-          ...recentTimeElement,
-          recentNameChecked: false,
-        };
-      })
-    )
+    setRecenTimeList(recentTimeList.map(recentTimeElement => (
+      {
+        ...recentTimeElement,
+        recentLabelChecked :false
+      }
+    )))
     //2.将选中的值存储到local session中
     updateHistoryOnLocalSession(relativeTimeItem)
 

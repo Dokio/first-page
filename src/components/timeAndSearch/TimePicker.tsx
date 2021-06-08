@@ -6,8 +6,9 @@ import TimezoneSelect from "react-timezone-select";
 import style from './timePicker.module.less';
 import { Select } from 'antd';
 import TimeZoneData from '../../test/timezone.json'
-import moment, {Moment} from "moment";
-import type {RangeValue} from "rc-picker/lib/interface.d"
+import moment, { Moment } from "moment";
+import 'moment-timezone';
+import type { RangeValue } from "rc-picker/lib/interface.d";
 
 interface RecentAndRelativeProps {
   setTimeValue: React.Dispatch<React.SetStateAction<RangeValue<moment.Moment> | undefined>>;
@@ -48,6 +49,7 @@ const TimePicker: FC = () => {
   return (
     <div>
       <RangePicker
+        open={true}
         value={timeValue!}
         onChange={(selectedTimeValue) => setTimeValue(selectedTimeValue)}
         renderExtraFooter={() =>
@@ -71,8 +73,52 @@ const TimePicker: FC = () => {
   );
 };
 
+
+
+interface CountryParams {
+  countryName: string;
+  countryZones: string[];
+  countryAbbreviation: string;
+  countryUtcOffset: string;
+}
+
+
+
 const TimeZone: FC = () => {
-  //console.log(TimeZoneData)
+  //console.log(TimeZoneData.countries.AD)
+  const [countryInformationList, setCountryInformationList] = useState<CountryParams[]>([{
+    countryName: "country.name",
+    countryZones: ["country.zones"],
+    countryAbbreviation: 'countryAbbreviation',
+    countryUtcOffset: "countryOffsetTemp.utcOffsetStr"
+  }])
+  useEffect(() => {
+    let countryInformationListTemp: CountryParams[] = [];
+    const countryAndTimezones = require('countries-and-timezones');
+    for (const country of Object.values(TimeZoneData.countries)) {
+      const countryOffsetTemp: { utcOffsetStr: string } = countryAndTimezones.getTimezone(country.zones[0])
+      countryInformationListTemp.push({
+        countryName: country.name,
+        countryZones: country.zones,
+        countryAbbreviation: moment.tz(country.zones[0]).zoneAbbr(),    // PST
+        countryUtcOffset: countryOffsetTemp.utcOffsetStr
+      })
+    }
+
+    // const countryAndTimezones = require('countries-and-timezones');
+    // const countryOffsetTemp: {utcOffsetStr:string}= countryAndTimezones.getTimezone(["America/Port_of_Spain", "America/Antigua"])
+    //["America/Port_of_Spain", "America/Antigua"]
+    console.log(countryInformationListTemp)
+    setCountryInformationList(countryInformationListTemp)
+  }, [])
+
+  // for (let country in TimeZoneData.countries){
+  //   if(TimeZoneData.countries.hasOwnProperty(country)){
+  //     console.log(TimeZoneData.countries[country])
+  //   }
+  // }
+
+
   const { Option } = Select;
 
   function onChange(value: any) {
@@ -90,6 +136,7 @@ const TimeZone: FC = () => {
   return (
     <div className={style['time-zone-box']}>
       <span>Time zone</span>
+
       <div >
         <Select
           className={style['timezone-selector']}
@@ -102,14 +149,30 @@ const TimeZone: FC = () => {
           onFocus={onFocus}
           onBlur={onBlur}
           onSearch={onSearch}
-          filterOption={(input, option: any) =>
-            option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
+        // filterOption={(input, option: any) =>
+        //   option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        // }
         >
           <Fragment>
             <Option value="Default">Default Japan, JST</Option>
             <Option value="Browser">Browser Time Japan, JST</Option>
             <Option value="Coordinated" className="timezoneHeader">Coordinated Universal Time UTC, GMT</Option>
+            {
+              countryInformationList.map(countryItem => (
+                <Option value={countryItem.countryName}>
+                  <div className={style['timeZoneText']}>
+                    <span>
+                      <span className={style['countryZones']} >{countryItem.countryZones}</span>
+                      <span className={style['countryName']} >{countryItem.countryName}, {countryItem.countryAbbreviation}</span>
+                    </span>
+                    {/* <span className={style['countryAbbreviation']}>{countryItem.countryAbbreviation}</span> */}
+                    <span className={style['countryUtcOffset']}>UTC {countryItem.countryUtcOffset}</span>
+                  </div>
+                </Option>
+                //, {countryItem.countryAbbreviation}, {countryItem.countryUtcOffset}
+              ))
+            }
+
           </Fragment>
 
         </Select>,
@@ -166,9 +229,9 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     },
   ]);
 
-  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps | RecentTimeProps):void => {
+  const updateHistoryOnLocalSession = (relativeTimeItem: RelativeTimeProps | RecentTimeProps): void => {
     let selectedTime: string;
-    if ('timeValue' in relativeTimeItem){
+    if ('timeValue' in relativeTimeItem) {
       selectedTime = JSON.stringify([moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale), moment()])
     } else {
       selectedTime = JSON.stringify(relativeTimeItem!.recentTimeValue)
@@ -219,7 +282,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     setRecenTimeList(recentTimeList.map(recentTimeElement => (
       {
         ...recentTimeElement,
-        recentLabelChecked :false
+        recentLabelChecked: false
       }
     )))
     //2.将选中的值存储到local session中
@@ -240,7 +303,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       const historyTimeListString: string[] = JSON.parse(localStorage.getItem('historyTimeList')!);
       const historyTimeListStringParse: string[] = historyTimeListString.map(historyTimeItem => JSON.parse(historyTimeItem))
       setRecenTimeList(historyTimeListStringParse.map(historyTimeItem => ({
-        recentTimeLabel:moment(historyTimeItem[0]).format('YYYY-MM-DD-HH:mm:ss')+" to "+moment(historyTimeItem[1]).format('YYYY-MM-DD-HH:mm:ss'),
+        recentTimeLabel: moment(historyTimeItem[0]).format('YYYY-MM-DD-HH:mm:ss') + " to " + moment(historyTimeItem[1]).format('YYYY-MM-DD-HH:mm:ss'),
         recentLabelChecked: false,
         recentTimeValue: historyTimeItem,
       })))
@@ -259,14 +322,14 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     setRecenTimeList(recentTimeList.map(recentTimeElement => (
       {
         ...recentTimeElement,
-        recentLabelChecked :recentTimeElement.recentTimeLabel === recentTimeItem.recentTimeLabel
+        recentLabelChecked: recentTimeElement.recentTimeLabel === recentTimeItem.recentTimeLabel
       }
     )))
 
     setRelativeTimeList(relativeTimeList.map(relativeTimeElement => (
       {
         ...relativeTimeElement,
-        relativelabelChecked:false,
+        relativelabelChecked: false,
       }
     )))
 
@@ -277,7 +340,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
     // 1.让输入框显示的值为我们选中的值
     // console.log("turn string into moment")
     // console.log(moment(recentTimeItem.recentTimeValue))
-    setTimeValue([moment(recentTimeItem.recentTimeValue[0]),moment(recentTimeItem.recentTimeValue[1])])
+    setTimeValue([moment(recentTimeItem.recentTimeValue[0]), moment(recentTimeItem.recentTimeValue[1])])
   }
 
   return (
@@ -285,7 +348,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
       <div className={style['recent-time']}>
         <span>Recently used absoulte ranges</span>
         {
-          recentTimeList.map(recentTimeItem=>(
+          recentTimeList.map(recentTimeItem => (
             <span
               key={recentTimeItem.recentTimeValue}
               className={recentTimeItem.recentLabelChecked ? style.checked : ''}
@@ -296,7 +359,7 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({ setTimeValue }) 
             </span>
           ))
         }
-        
+
       </div>
       <div className={style['relative-time']}>
         <span>Relative Time Range</span>

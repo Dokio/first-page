@@ -15,6 +15,7 @@
     "antd": "^4.15.2",
     "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.0",
+    "countries-and-timezones": "^2.4.0",
     "file-loader": "6.1.1",
     "fs-extra": "^9.0.1",
     "less-loader": "^7.3.0",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@types/esrever": "^0.2.0",
+    "@types/moment-timezone": "^0.5.30",
     "@types/react-grid-layout": "^1.1.1",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",

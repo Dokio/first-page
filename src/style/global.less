@@ -78,73 +78,73 @@
 
 
 //the style of time picker
-.ant-picker-ranges{
-  position: absolute;
-  left: 700px;
-  top: 430px;
-  button{
-    color: #D7DDE6;
-    padding-bottom: 30px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: solid #7F8392 1px;
-    position: relative;
+// .ant-picker-ranges{
+//   position: absolute;
+//   left: 700px;
+//   top: 430px;
+//   button{
+//     color: #D7DDE6;
+//     padding-bottom: 30px;
+//     padding-left: 10px;
+//     padding-right: 10px;
+//     border: solid #7F8392 1px;
+//     position: relative;
+//     width:150px;
     
-    span{
-      display:none;
+//     span{
+//       display:none;
   
-    }
-  }
-  ::after{
-    content:"Apply time range";
-    font-weight: 400;
-    font-size: 18px;
-  }
-  ::before{
-    content: "";
-    background-color: #1f1f1f;
-    width: 150px;
-    height: 26px;
-    position: absolute;
-    left: 20px;
-    top: 40px;
-  }
-}
+//     }
+//   }
+//   ::after{
+//     content:"Apply time range";
+//     font-weight: 400;
+//     font-size: 18px;
+//   }
+//   ::before{
+//     content: "";
+//     background-color: #1f1f1f;
+//     width: 150px;
+//     height: 26px;
+//     position: absolute;
+//     left: 20px;
+//     top: 40px;
+//   }
+// }
 
 //the style of time picker after click
-.ant-picker-ranges{
-  position: absolute;
-  left: 700px;
-  top: 430px;
-  button{
-    color: #D7DDE6;
-    padding-bottom: 30px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: solid #7F8392 1px;
-    position: relative;
+// .ant-picker-ranges{
+//   position: absolute;
+//   left: 700px;
+//   top: 430px;
+//   button{
+//     color: #D7DDE6;
+//     padding-bottom: 30px;
+//     padding-left: 10px;
+//     padding-right: 10px;
+//     border: solid #7F8392 1px;
+//     position: relative;
     
-    span{
-      display:none;
+//     span{
+//       display:none;
   
-    }
-  }
-  ::after{
-    content:"Apply time range";
-    //content:"hello";
-    font-weight: 400;
-    font-size: 18px;
-  }
-  ::before{
-    content: "";
-    background-color: #1f1f1f;
-    width: 150px;
-    height: 26px;
-    position: absolute;
-    left: 20px;
-    top: 40px;
-  }
-}
+//     }
+//   }
+//   // ::after{
+//   //   content:"Apply time range";
+//   //   font-weight: 400;
+//   //   font-size: 18px;
+//   // }
+//   ::before{
+//     content: "";
+//     background-color: #1f1f1f;
+//     width: 150px;
+//     height: 26px;
+//     position: absolute;
+//     left: 20px;
+//     top: 40px;
+//   }
+// }
 
 
 
@@ -444,3 +444,43 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after{
 .ant-select-dropdown  {
   width:550px !important;
 }
+
+//change the style of apply time range 
+.ant-picker-ranges{
+  position: absolute;
+  left: 700px;
+  top: 430px;
+  .ant-picker-ok{
+    
+    button{  // .ant-btn-sm .ant-btn-primary ant-btn
+      width: 140px;
+      height:30px;
+      span{
+        display:none;
+      }
+    }
+    ::after{
+      z-index: 999;
+      content:"Apply Time Range"!important;
+    }
+
+
+  }
+
+}
+
+.ant-click-animating-node {
+  display:none;
+}
+
+[ant-click-animating-without-extra-node='false']::after{
+    display:none;
+}
+
+[ant-click-animating-without-extra-node='true']::after{
+    display:none;
+}
+
+// [ant-click-animating-without-extra-node='true']::after, .ant-click-animating-node{
+  
+// }

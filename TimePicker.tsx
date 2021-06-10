@@ -18,6 +18,9 @@ interface TimePickerProps {
 }
 interface RecentAndRelativeProps {
   setTimeValue: React.Dispatch<React.SetStateAction<RangeValue<moment.Moment>>>;
+  setChangedByRelativeOrRecent: React.Dispatch<
+    React.SetStateAction<boolean | undefined>
+  >;
 }
 
 interface CountryParams {
@@ -58,6 +61,8 @@ enum RelativeTimeScale {
 const { RangePicker } = DatePicker;
 
 const TimePicker: FC<TimePickerProps> = ({ params, setParams }) => {
+  const [changedByRelativeOrRecent, setChangedByRelativeOrRecent] =
+    useState<boolean>();
   const [timeValue, setTimeValue] = useState<RangeValue<Moment>>([
     moment(),
     moment(),
@@ -92,21 +97,25 @@ const TimePicker: FC<TimePickerProps> = ({ params, setParams }) => {
       <RangePicker
         //open={true}
         value={timeValue} //?? [moment(), moment()]
-        // onChange={(selectedTimeValue) => {
-        //   console.log('rangepicker onChange', selectedTimeValue);
-        //   setTimeValue(selectedTimeValue);
-        // }}
-
         panelRender={originPanel => {
+          console.log(111111111111111);
           if (typeof originPanel === 'object') {
             const rangedValue = (originPanel as ReactElement).props.children[0]
               .props.children.props.value.rangedValue;
             console.log(rangedValue[0].format(), rangedValue[1].format());
             if (
-              !timeValue![0]!.isSame(rangedValue[0]) ||
-              !timeValue![1]!.isSame(rangedValue[1])
+              !timeValue?.[0]?.isSame(rangedValue[0]) ||
+              !timeValue?.[1]?.isSame(rangedValue[1])
             ) {
-              setTimeValue([rangedValue[0], rangedValue[1]]);
+              if (changedByRelativeOrRecent) {
+                setTimeValue(timeValue);
+                setChangedByRelativeOrRecent(false);
+              } else {
+                setTimeValue([rangedValue[0], rangedValue[1]]);
+              }
+              //console.log(2222222222222);
+              //setTimeValue(timeValue);
+              //setTimeValue([rangedValue[0], rangedValue[1]]);
             }
           }
           return originPanel;
@@ -114,7 +123,10 @@ const TimePicker: FC<TimePickerProps> = ({ params, setParams }) => {
         renderExtraFooter={() => (
           <Fragment>
             <TimeZone />
-            <RecentAndRelative setTimeValue={setTimeValue} />
+            <RecentAndRelative
+              setTimeValue={setTimeValue}
+              setChangedByRelativeOrRecent={setChangedByRelativeOrRecent}
+            />
 
             <Button
               text="Apply time range"
@@ -248,6 +260,7 @@ const TimeZone: FC = () => {
 
 export const RecentAndRelative: FC<RecentAndRelativeProps> = ({
   setTimeValue,
+  setChangedByRelativeOrRecent,
 }) => {
   ///////////////////////////////// Relative Time
   const [relativeTimeList, setRelativeTimeList] = useState<RelativeTimeProps[]>(
@@ -334,6 +347,8 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({
       moment().subtract(relativeTimeItem.timeValue, relativeTimeItem.timeScale),
       moment(),
     ]);
+    setChangedByRelativeOrRecent(true);
+    console.log(3333333333333333);
   };
 
   ///////////////////////////////// Recent Time
@@ -384,10 +399,10 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({
         relativelabelChecked: false,
       })),
     );
-    console.log('recent onChange', [
-      moment(recentTimeItem.recentTimeValue[0]),
-      moment(recentTimeItem.recentTimeValue[1]),
-    ]);
+    // console.log('recent onChange', [
+    //   moment(recentTimeItem.recentTimeValue[0]),
+    //   moment(recentTimeItem.recentTimeValue[1]),
+    // ]);
 
     //2.将选中的值存储到local session中
     //updateHistoryOnLocalSession(recentTimeItem)
@@ -399,6 +414,8 @@ export const RecentAndRelative: FC<RecentAndRelativeProps> = ({
       moment(recentTimeItem.recentTimeValue[0]),
       moment(recentTimeItem.recentTimeValue[1]),
     ]);
+    setChangedByRelativeOrRecent(true);
+    console.log(4444444444444444);
   };
 
   return (
